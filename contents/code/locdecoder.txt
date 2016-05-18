@@ -1,0 +1,29 @@
+public Position getLocalPosition(Position ref) throws MissingInformationException {
+	if (!horizontal_position_available)
+		throw new MissingInformationException("No position information available!");
+		
+	// latitude zone size
+	double Dlat = isOddFormat() ? 90.0/59.0 : 90.0/60.0;
+		
+	// latitude zone index
+	double j = Math.floor(ref.getLatitude()/Dlat) + Math.floor(0.5+(mod(ref.getLatitude(), Dlat))/Dlat-getCPREncodedLatitude()/((double)(1<<17)));
+		
+	// decoded position latitude
+	double Rlat = Dlat*(j+getCPREncodedLatitude()/((double)(1<<17)));
+		
+	// longitude zone size
+	double Dlon = 90.0/Math.max(1.0, NL(Rlat)-(isOddFormat()?1.0:0.0));
+		
+	// longitude zone coordinate
+	double m =
+			Math.floor(ref.getLongitude()/Dlon) +
+			Math.floor(0.5+(mod(ref.getLongitude(),Dlon))/Dlon-(float)getCPREncodedLongitude()/((double)(1<<17)));
+		
+	// and finally the longitude
+	double Rlon = Dlon * (m + getCPREncodedLongitude()/((double)(1<<17)));
+		
+//		System.out.println("Loc: EncLon: "+getCPREncodedLongitude()+
+//				" m: "+m+" Dlon: "+Dlon+ " Rlon2: "+Rlon2);
+		
+	return new Position(Rlon, Rlat, 0.0);
+}

@@ -1,0 +1,20 @@
+{
+\tt
+{\hlstd {\hllin 01\ }def\ decrypt(self,\ T,\ Y):\leavevmode\par
+{\hllin 02\ }}{\hlstd\ \ \ \ }{\hlstd retval\ $\mathord{=}$\ ''\leavevmode\par
+{\hllin 03\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 04\ }}{\hlstd\ \ \ \ }{\hlstd n\ $\mathord{=}$\ len(Y)\leavevmode\par
+{\hllin 05\ }}{\hlstd\ \ \ \ }{\hlstd l\ $\mathord{=}$\ self.split(n)\leavevmode\par
+{\hllin 06\ }}{\hlstd\ \ \ \ }{\hlstd r\ $\mathord{=}$\ 10\ \#{}self.rnds(n)\leavevmode\par
+{\hllin 07\ }\leavevmode\par
+{\hllin 08\ }}{\hlstd\ \ \ \ }{\hlstd A\ $\mathord{=}$\ Y[:l]\leavevmode\par
+{\hllin 09\ }}{\hlstd\ \ \ \ }{\hlstd B\ $\mathord{=}$\ Y[l:]\leavevmode\par
+{\hllin 10\ }}{\hlstd\ \ \ \ }{\hlstd for\ i\ in\ range(r\ $\mathord{-}$\ 1,\ $\mathord{-}$1,\ $\mathord{-}$1):\leavevmode\par
+{\hllin 11\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd C\ $\mathord{=}$\ B\leavevmode\par
+{\hllin 12\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd B\ $\mathord{=}$\ A\leavevmode\par
+{\hllin 13\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd A\ $\mathord{=}$\ self.sub(C,\ self.F(n,\ T,\ i,\ B))\leavevmode\par
+{\hllin 14\ }}{\hlstd\ \ \ \ \ \ \ \ \ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 15\ }}{\hlstd\ \ \ \ }{\hlstd retval\ $\mathord{=}$\ FFXInteger(str(A)\ $\mathord{+}$\ str(B),\ radix$\mathord{=}$self.\_{}radix)\leavevmode\par
+{\hllin 16\ }\leavevmode\par
+{\hllin 17\ }}{\hlstd\ \ \ \ }{\hlstd return\ retval}\leavevmode\par
+}

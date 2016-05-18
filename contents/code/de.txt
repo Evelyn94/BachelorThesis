@@ -1,0 +1,17 @@
+def decrypt(self, T, Y):
+    retval = ''
+        
+    n = len(Y)
+    l = self.split(n)
+    r = 10 #self.rnds(n)
+
+    A = Y[:l]
+    B = Y[l:]
+    for i in range(r - 1, -1, -1):
+        C = B
+        B = A
+        A = self.sub(C, self.F(n, T, i, B))
+            
+    retval = FFXInteger(str(A) + str(B), radix=self._radix)
+
+    return retval

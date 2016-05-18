@@ -1,0 +1,68 @@
+{
+\tt
+{\hlstd {\hllin 01\ }public\ Position\ getGlobalPosition(SurfacePositionMsg\ other)\ throws\ MissingInformationException,\ \leavevmode\par
+{\hllin 02\ }\ PositionStraddleError,\ BadFormatException\ $\{$\leavevmode\par
+{\hllin 03\ }\ if\ (!tools.areEqual(other.getIcao24(),\ getIcao24()))\leavevmode\par
+{\hllin 04\ }}{\hlstd\ \ \ }{\hlstd throw\ new\ IllegalArgumentException(\leavevmode\par
+{\hllin 05\ }}{\hlstd\ \ \ \ \ }{\hlstd String.format("Transmitter\ of\ other\ message\ (\%{}s)\ not\ equal\ to\ this\ (\%{}s).",\leavevmode\par
+{\hllin 06\ }}{\hlstd\ \ \ \ \ }{\hlstd tools.toHexString(other.getIcao24()),\ tools.toHexString(this.getIcao24())));\leavevmode\par
+{\hllin 07\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 08\ }\ if\ (other.isOddFormat()\ $\mathord{=}$$\mathord{=}$\ this.isOddFormat())\leavevmode\par
+{\hllin 09\ }}{\hlstd\ \ }{\hlstd throw\ new\ BadFormatException("Expected\ "$\mathord{+}$(isOddFormat()?"even":"odd")$\mathord{+}$"\ message\ format.",\ other.toString());\leavevmode\par
+{\hllin 10\ }\leavevmode\par
+{\hllin 11\ }\ if\ (!horizontal\_{}position\_{}available)\leavevmode\par
+{\hllin 12\ }}{\hlstd\ \ }{\hlstd throw\ new\ MissingInformationException("No\ position\ information\ available!");\leavevmode\par
+{\hllin 13\ }\ if\ (!other.hasPosition())\leavevmode\par
+{\hllin 14\ }}{\hlstd\ \ }{\hlstd throw\ new\ MissingInformationException("Other\ message\ has\ no\ position\ information.");\leavevmode\par
+{\hllin 15\ }\leavevmode\par
+{\hllin 16\ }\ SurfacePositionMsg\ even\ $\mathord{=}$\ isOddFormat()?other:this;\leavevmode\par
+{\hllin 17\ }\ SurfacePositionMsg\ odd\ $\mathord{=}$\ isOddFormat()?this:other;\leavevmode\par
+{\hllin 18\ }\leavevmode\par
+{\hllin 19\ }\ //\ Helper\ for\ latitude\ single(Number\ of\ zones\ NZ\ is\ set\ to\ 15)\leavevmode\par
+{\hllin 20\ }\ double\ Dlat0\ $\mathord{=}$\ 90.0/60.0;\leavevmode\par
+{\hllin 21\ }\ double\ Dlat1\ $\mathord{=}$\ 90.0/59.0;\leavevmode\par
+{\hllin 22\ }\leavevmode\par
+{\hllin 23\ }\ //\ latitude\ index\leavevmode\par
+{\hllin 24\ }\ double\ j\ $\mathord{=}$\ Math.floor((59.0*even.getCPREncodedLatitude()$\mathord{-}$60.0*odd.getCPREncodedLatitude())/((double)(1$\mathord{<}$$\mathord{<}$17))$\mathord{+}$0.5);\leavevmode\par
+{\hllin 25\ }\leavevmode\par
+{\hllin 26\ }\ //\ global\ latitudes\leavevmode\par
+{\hllin 27\ }\ double\ Rlat0\ $\mathord{=}$\ Dlat0\ *\ (mod(j,60)$\mathord{+}$even.getCPREncodedLatitude()/((double)(1$\mathord{<}$$\mathord{<}$17)));\leavevmode\par
+{\hllin 28\ }\ double\ Rlat1\ $\mathord{=}$\ Dlat1\ *\ (mod(j,59)$\mathord{+}$odd.getCPREncodedLatitude()/((double)(1$\mathord{<}$$\mathord{<}$17)));\leavevmode\par
+{\hllin 29\ }\leavevmode\par
+{\hllin 30\ }\ //\ Southern\ hemisphere?\leavevmode\par
+{\hllin 31\ }\ if\ (Rlat0\ $\mathord{>}$$\mathord{=}$\ 270\ \&{}\&{}\ Rlat0\ $\mathord{<}$$\mathord{=}$\ 360)\ Rlat0\ $\mathord{-}$$\mathord{=}$\ 360;\leavevmode\par
+{\hllin 32\ }\ if\ (Rlat1\ $\mathord{>}$$\mathord{=}$\ 270\ \&{}\&{}\ Rlat1\ $\mathord{<}$$\mathord{=}$\ 360)\ Rlat1\ $\mathord{-}$$\mathord{=}$\ 360;\leavevmode\par
+{\hllin 33\ }\leavevmode\par
+{\hllin 34\ }\ //\ Northern\ hemisphere?\leavevmode\par
+{\hllin 35\ }\ if\ (Rlat0\ $\mathord{<}$$\mathord{=}$\ $\mathord{-}$270\ \&{}\&{}\ Rlat0\ $\mathord{>}$$\mathord{=}$\ $\mathord{-}$360)\ Rlat0\ $\mathord{+}$$\mathord{=}$\ 360;\leavevmode\par
+{\hllin 36\ }\ if\ (Rlat1\ $\mathord{<}$$\mathord{=}$\ $\mathord{-}$270\ \&{}\&{}\ Rlat1\ $\mathord{>}$$\mathord{=}$\ $\mathord{-}$360)\ Rlat1\ $\mathord{+}$$\mathord{=}$\ 360;\leavevmode\par
+{\hllin 37\ }\leavevmode\par
+{\hllin 38\ }\ //\ ensure\ that\ the\ number\ of\ even\ longitude\ zones\ are\ equal\leavevmode\par
+{\hllin 39\ }\ if\ (NL(Rlat0)\ !$\mathord{=}$\ NL(Rlat1))\leavevmode\par
+{\hllin 40\ }}{\hlstd\ \ }{\hlstd throw\ new\ org.opensky.libadsb.exceptions.PositionStraddleError(\leavevmode\par
+{\hllin 41\ }}{\hlstd\ \ \ }{\hlstd "The\ two\ given\ position\ straddle\ a\ transition\ latitude\ "$\mathord{+}$\leavevmode\par
+{\hllin 42\ }}{\hlstd\ \ \ }{\hlstd "and\ cannot\ be\ decoded.\ Wait\ for\ positions\ where\ they\ are\ equal.");\leavevmode\par
+{\hllin 43\ }\leavevmode\par
+{\hllin 44\ }\ //\ Helper\ for\ longitude\leavevmode\par
+{\hllin 45\ }\ double\ Dlon0\ $\mathord{=}$\ 90.0/Math.max(1.0,\ NL(Rlat0));\leavevmode\par
+{\hllin 46\ }\ double\ Dlon1\ $\mathord{=}$\ 90.0/Math.max(1.0,\ NL(Rlat1)$\mathord{-}$1);\leavevmode\par
+{\hllin 47\ }\leavevmode\par
+{\hllin 48\ }\ //\ longitude\ index\leavevmode\par
+{\hllin 49\ }\ double\ NL\_{}helper\ $\mathord{=}$\ NL(isOddFormat()?Rlat1:Rlat0);\ //\ assuming\ that\ this\ is\ the\ newer\ message\leavevmode\par
+{\hllin 50\ }\ double\ m\ $\mathord{=}$\ Math.floor((even.getCPREncodedLongitude()*(NL\_{}helper$\mathord{-}$1)$\mathord{-}$odd.getCPREncodedLongitude()*NL\_{}helper)/((double)(1$\mathord{<}$$\mathord{<}$17))$\mathord{+}$0.5);\leavevmode\par
+{\hllin 51\ }\leavevmode\par
+{\hllin 52\ }\ //\ global\ longitude\leavevmode\par
+{\hllin 53\ }\ double\ Rlon0\ $\mathord{=}$\ Dlon0\ *\ (mod(m,Math.max(1.0,\ NL(Rlat0)))\ $\mathord{+}$\ even.getCPREncodedLongitude()/((double)(1$\mathord{<}$$\mathord{<}$17)));\leavevmode\par
+{\hllin 54\ }\ double\ Rlon1\ $\mathord{=}$\ Dlon1\ *\ (mod(m,Math.max(1.0,\ NL(Rlat1)$\mathord{-}$1))\ $\mathord{+}$\ odd.getCPREncodedLongitude()/((double)(1$\mathord{<}$$\mathord{<}$17)));\leavevmode\par
+{\hllin 55\ }\leavevmode\par
+{\hllin 56\ }\ //\ correct\ longitude\leavevmode\par
+{\hllin 57\ }\ if\ (Rlon0\ $\mathord{<}$\ $\mathord{-}$180\ \&{}\&{}\ Rlon0\ $\mathord{>}$\ $\mathord{-}$360)\ Rlon0\ $\mathord{+}$$\mathord{=}$\ 360;\leavevmode\par
+{\hllin 58\ }\ if\ (Rlon1\ $\mathord{<}$\ $\mathord{-}$180\ \&{}\&{}\ Rlon1\ $\mathord{>}$\ $\mathord{-}$360)\ Rlon1\ $\mathord{+}$$\mathord{=}$\ 360;\leavevmode\par
+{\hllin 59\ }\ if\ (Rlon0\ $\mathord{>}$\ 180\ \&{}\&{}\ Rlon0\ $\mathord{<}$\ 360)\ Rlon0\ $\mathord{-}$$\mathord{=}$\ 360;\leavevmode\par
+{\hllin 60\ }\ if\ (Rlon1\ $\mathord{>}$\ 180\ \&{}\&{}\ Rlon1\ $\mathord{<}$\ 360)\ Rlon1\ $\mathord{-}$$\mathord{=}$\ 360;\leavevmode\par
+{\hllin 61\ }\leavevmode\par
+{\hllin 62\ }\ return\ new\ Position(isOddFormat()?Rlon1:Rlon0,\leavevmode\par
+{\hllin 63\ }}{\hlstd\ \ \ \ \ \ }{\hlstd isOddFormat()?Rlat1:Rlat0,\leavevmode\par
+{\hllin 64\ }}{\hlstd\ \ \ \ \ \ }{\hlstd 0.0);\leavevmode\par
+{\hllin 65\ }$\}$}\leavevmode\par
+}

@@ -1,0 +1,212 @@
+% !Mode:: "TeX:UTF-8"
+
+\chapter{设计与实现}
+
+\section{设计模型}
+
+\subsection{系统模型}
+本系统假设的应用模型如图一所示，GNSS把飞机的位置信息发送给飞机的GPS Receiver,再由ADS-B Transmitter将飞机自身的身份标识符、3D位置、速度、飞行目的地和其他空间信息编码成ADS-B消息并对其进行加密然后以一定的周期广播出去。地面上的空中交通控制中心(Air Traffic Control, ATC) 和其他附近一定范围内飞机的ADS-B Receiver都能接收到ADS-B信息并对其进行处理或广播。只有预先与发送ADS-B消息飞行器进行密钥协商的的其他飞行器或地面基站的ADS-B IN才能解码出真实的发送方的ICAO24。
+本课题由于只研究ADS-B的数据链隐私保护即ADS-B消息的加解密，故并没有模拟ADS-B消息的发送和接收过程。加密过程相当于在ADS-B OUT 中实现，解密过程和解码显示过程相当于在ADS-B IN中实现。
+
+\subsection{网络模型}
+本课题的网络模型设计两种通信模式，其中GPS与ADS-B Out的GPS Receiver之间通过GNSS数据链路通信，而ADS-B Out、ADS-B In 和ADS-B Ground Stations 之间通过MODE S 1090 ES数据链路通信。本课题重点讨论ADS-B Out、ADS-B In 和ADS-B Ground Stations 之间的通信模式。在本课题中这三者之间通信采用的是MODE S 1090 ES 的ADS-B数据链技术。
+1090MHz拓展性应答机随机自发报告消息是为商用航空设计的而且也是ADS-B OUT的国际化标准。1090ES采用扩展型断续振荡的方式，由112个信息脉冲构成的S模式ADS-B长应答信号通过机载设备每隔1s广播一次。112位信息脉冲串的前88位为消息位、后24位为奇偶校验位。具体信息内容包括经度、纬度、方位和速度等信息。
+下面简单介绍下1090MHz拓展性应答机随机自发报告(extended squitter)消息的格式。这个拓展性应答机随机自发报告消息长112bits,其中包含了56bits的ADS-B信息。前同步码(Preamable)包含了一个特定的用于实现同步的比特序列。下行链路(Downlink Format)格式域为5bits,这\newline 5bits表明了消息的类型—这个域被设置为17的话则代表了这是一条拓展性应答机随机自发报告消息。3bits的容量域(Capability)代表了S模式传输器的通信容量能力。飞行器地址(Aircraft Address)是24bits的传播器也及装载了该传播器的飞行器的唯一标识符。不存在两架不同的飞行器拥有统一个统一标识符。ADS-B数据(ADS-B Data)长56bits也包含了相关的监视数据(例如：身份信息，位置信息，速度信息，紧急码和质量等级)。奇偶校验值(Parity Check)是一个24bits的用于让接受者在接收到消息时检测传输错误的语。脉冲式调整方案被用于消息的编码和传输。ADS-B使用了一个广播式的通信范例。飞行器之间传输信息时并没有考虑敌人会接收信息，任何距离飞行器一定范围的敌人都可以接收并解码传输的消息。另外，传输的协议不要求消息接收的确认也没有实现任何的保持在线功能(例如：如果一架飞行器的ADS-B消息在一个确定的时间段内没有被地面基站或其他飞行器所接收到，这个系统将不会再询问这架飞行器的状态)。
+
+本课题重点在于加解密算法的研究和实现故并未考虑ADS-B具体网络传输过程的模拟，只做原理性的介绍。
+
+\subsection{ADS-B安全模型}
+\subsubsection{不考虑商用航空，只考虑通用航空}
+商用航空主要指固定的航班，根据航空飞行发，商用航班不允许匿名或隐藏轨迹，不仅因为这样做不利于飞行安全而且也不便于旅客查询航班的信息，并且商用航空每架飞机都有指定的航行路线，根据航行路线就可以推出航班号，因此根本没有匿名的必要。而通用航空则完全不同，通用航空包含一大部分领域的飞机，包括私人飞机、法院或其他紧急服务的飞机到商业飞机。这些飞机出于个人、政治、医疗或商业愿意不愿意暴露飞行动机和飞行目的地及喜好，因此存在保证保证他们的身份匿名的需求。
+
+\subsubsection{不考虑主动攻击如ghost plane; dos}
+针对ADS-B的攻击种类繁多，统分为主动攻击和被动攻击。本课题主要解决ADS-B的数据链隐私保护即保护ADS-B消息的机密性，防止ADS-B消息被无关人员窃听的被动攻击防御，故在本文中不考虑ADS-B假消息的注入及泛洪攻击等主动攻击的情形。
+
+\subsubsection{遵守航空法不隐藏轨迹}
+出于航行安全的考虑，航空安全法不建议任何通过ADS-B通信的飞行器隐藏轨迹，但是隐藏飞行器的唯一标识符并不会影响飞行安全且可以达到保护飞行器的隐私的效果，因此本课题通过加密ICAO24(通用的航空的唯一标识)，ADS-B消息的一部分，且加密ICAO24并不会改变ADS-B消息中的飞行轨迹也不会影响ADS-B消息的解码而且可以达到保护通用航空隐私的目的。
+
+\section{系统流程图}
+
+第一步：从OPenSky的网站上下载到包含ADS-B的原始消息的.avro文件。.avro文件是apache下的一个数据序列化系统的文件，它拥有丰富的数据结构类型。本次用的的.avro文件的数据结构如下:
+
+\input{chapters/1avro.tex}
+
+第二步：对原始的.avro文件按时间顺序进行排序，因为ADS-B消息解码位置信息时需要用到两条连续的ADS-B消息，所以要先对消息进行排序，否则无法对ADS-B消息的位置信息进行解码。
+
+第三步：整个.avro包包含若大量的ADS-B消息，故也包含了若干条轨迹信息，本课题主要研究ADS-B消息的加解密，故只需从若干条轨迹中抽取出其中的一两条来进行试验分析即可。
+
+第四步：对选取的一条轨迹的ADS-B消息在ADS-B OUT 中用FFX算法进行加密。
+
+第五步：把加密过的若干条在公益轨迹上的ADS-B消息发送给ADS-B IN，本课题中没有模拟发送过程。
+
+第六步：在ADS-B IN1中对加密过的ADS-B消息用FFX算法进行解密。
+
+第七步：在ADS-B IN1中对解密的ADS-B消息进行解码。
+
+第八步：把解码后的信息转换为.kml文件并在Google Earth上显示与未经加密的轨迹进行对比以并验证加解密效果。.kml文件是google公司创建的一种地理信息文件，用于描述和保存时间、地点、经纬度、海拔高度等轨迹参数。可用Google Earth打开。
+
+第九步：在另一个ADS-B IN，即ADS-B IN2中直接对接收到的经过加密的ADS-B消息进行解码并转换为.kml文件在Google Earth上显示，与原始的未经过加密的ADS-B轨迹信息和经过解密的ADS-B轨迹信息进行对比以验证试验结果。
+
+总的流程概括如下：\newline
+sample.avro \to sorted.avro \to select.avro \to FFX Encrypt/Decrypt(ICAO24) \to decoder \to select.kml
+
+\section{模块设计}
+\subsection{加解密模块} 
+FFX 模型的算法可以描述为：\newline
+算法setup：\newline 
+FFX 模型的初始化阶段确定\newline 
+(1)字母表 $Chars=\{char_0, char_1,…, char_{(radix-1)}\}$及其基数 radix ；\newline 
+(2)确定非平衡Feistel网络类型；\newline 
+(3)消息空间$Char^n$中的字符串长度（字符个数） n ；\newline 
+(4)Feistel网络使用的轮次数r ，伪随机函数$f_k$及其运算类型，和调整因子t等。\newline
+算法encryption：\newline 
+输入为明文字符串 x、对称密钥k 和调整因子t，输出为密文字符串 y ，字符串x和 y 同属于消息空间$Char^n$，都是由字母表 Chars 中的字符组成的长度为n 的字符串。\newline
+加密过程描述为：\newline 
+建立字母表Chars与 $Chars' = \{0,1,2,\cdots ,radix-1\}$的映射，从而将字符串中的每个字符$char_i$编码为相应的第 i 个数字，注意 Chars'中每个数字前面的0和其他字符一样计入长度。举例：Chars = ${a,b,c,\cdots,z}$，x = acz，将字符串 x 编码为010326 。\newline 
+然后，执行r 轮的非平衡Feistel 网络的运算：\newline
+(1)将字符串 x 的编码作为输入，并分割为两部分L和R ，$|L|\neq|R|$；\newline
+(2)执行伪随机函数$f_k$，对 L 和$f_k (R)$执行下面某种类型的运算得到 L'：(i)$c_i =( a_i + b_i)$  mod  radix ，当 radix = 2时，该运算为异或运算；(ii)$\sum c_i radix^(n-i) =( \sum a_i radix^{(n-i)} +\sum b_i radix^{(n-i)})$ mod  radix；\newline
+(3)连接 L'与R 得到输出 L'$\parallel$R，并作为下一轮运算的输入。\newline 
+最后，将非平衡Feistel 网络得到的密文中的数字编码映射回字母表中的字母，从而得到密文 y 。\newline
+算法decryption：\newline 
+解密算法为算法encryption的逆过程。 FFX 模型的工作原理如下图所示。
+
+\pic[htbp]{FFX模型}{0.8\textwidth}{p12}
+
+与FFSEM相比，FFX模型具有更广的适用范围，而且避免了Cycle-walking，具有较高的效率。\newline
+FFX算法的三个主要步骤：\newline
+step1:赋值\newline
+把加密原文长度赋值给n,把分段长度赋值给l,把加密轮数赋值给r,把两个分段分别赋值给A和B。\newline
+step2:Feistel转化\newline
+把两段消息放入Feistel轮变化中经过r轮转化后输出。\newline
+step3:合并\newline
+把从Feisel轮变化中输出的两段消息合并。
+
+
+\subsection{解码模块}
+step1:建立从.avro文件中提取所需的ADS-B rawMessage各区域的类；
+
+step2:先判断downlink format(DF)是否为17，是则继续step2；
+
+step3:再判断第33-第37位的Type Code(TC)的值根据TC的不同判断ADS-B rawMessage包含的是什么信息，再针对rawMessage的类型对rawMessage分别进行不同的解码；
+
+step4:把解码出来的ADS-B信息放在.kml文件的对应的位置。
+
+下面对解码的最重要部分位置解码进行详细的讲解，ADS-B位置解码分为广域位置解码（全球解码）和局域位置解码（本地解码）
+\subsubsection{广域位置解码（全球解码）} 
+广域解码方式，全球解码需要两组编码数据来完成解码，即一组奇编码数据和一组偶编码数据，与局域解码方式相比，不需要提供基准位置信息，任何位置都可以解码。 采用接收到的偶编码（由YZ0，XZ0表示）和奇编码（由 YZ1，XZ1表示）的两个位置消息，共同来产生全球位置的纬度Rlat 和经度Rlon。对于空中位置，偶编码和奇编码位置消息之间的时间间隔不超过 10s，这是由 3 n mile 的最大允许间距决定的。
+ 
+解码步骤主要分为以下几个部分：\newline 
+(1)将经纬度的分区的数量 Dlati 计算出来。\newline 
+对于空中位置和地面位置 CPR 分别计算分区的数量，CPR 奇编码计算的为$Dlati_1$ ，CPR 偶编码计算的为$Dlati_0$。\newline
+空中位置：	
+$Dlati_i=\frac{360}{4\times NZ-i}= \begin{cases} 6.00, & \mbox{偶编码} \\ 6.10, & \mbox{奇编码} \end{cases}$\newline
+地面位置：
+$Dlati_i=\frac{90}{4\times NZ-i}= \begin{cases} 0, & \mbox{偶编码} \\ 1, & \mbox{奇编码} \end{cases}$\newline
+(2)计算纬度区域索引值 j 。\newline
+$j = floor(\frac{59*YZ_0-60*YZ_1}{2^{17}} + \frac{1}{2})$\newline
+当 j <0 时， j =偶纬度Zone的编号减 60， j =奇纬度Zone的编号减 59；\newline 
+当 j >0 or j = 0 时， j =偶纬度Zone的编号， j =奇纬度Zone的编号。 \newline
+(3)计算纬度值$Rlat_i$。\newline
+$Rlat_i = Dlat_i(MOD(j,60-i)+\frac{YZ_i}{2^{17}})$\newline
+若求出的纬度绝对值大于 $90^{\circ}$，则应减去 $360^{\circ}$。  因为纬度的取值范围为$-90^{\circ} ~ +90^{\circ}$。\newline 
+(4)如果NL($Rlat_0$)不等于NL($Rlat_1$)，则表示两次收到的位置信息不再同一个纬度区域内，这种情况说明飞行器在跨越纬度区域，不能解码，需等待接收到位置信息中经纬度区域值相等时解码。如果相等，则计算$Dlon_i$的值。$Dlon_i = \frac{360}{n_i}, n_i$ 为[NL($Rlat_i$)-1]中大的那个数。\newline 
+(5)然后计算经度索引值 m 。\newline
+$m = floor(\frac{XZ_0*(NL-1)-XZ_1*NL}{2^{17}}+\frac{1}{2})NL=NL(Rlat_i)$\newline
+(6)最后计算经度$Rlon_i$。\newline
+$Rloni=Dloni(\frac{MoD(m,ni)+XZ_i}{2^{17}})n_i = max([NL(Rlat_i)-1],1)$\newline
+若求出的经度绝对值大于 $180^{\circ}$，则应减去 $360^{\circ}$。又因为无论是广域位置解码还是局域位置解码都仍然存在两种情况，即：空中位置和地面位置。但上述算法两种对于两种类型解码均适用。因为经度的取值范围为$-180^{\circ} ~ +180^{\circ}$。
+
+\subsubsection{局域位置解码（本地解码）}
+对于某个参考点（参考点可以是由全球解码确认的以前跟踪的某个位置，也可以是本机的位置，假定其纬度和经度分别为lats、lons ），CPR 算法将通过解码获得本地明确的地理位置（纬度$Rlat_i$和经度$Rlon_i$）。对于空中位置，该位置在真实位置的 180 n mile 内；对于地面位置，该位置在真实位置的 45 n mile(180/4 n mile)以内。\newline
+解码步骤：\newline 
+(1)首先计算纬度 Zone 的尺寸$Dlat_i$。\newline
+
+空中位置：	
+$Dlati_i=\frac{360}{4\times NZ-i}= \begin{cases} 6.00, & \mbox{偶编码} \\ 6.10, & \mbox{奇编码} \end{cases}$\newline
+地面位置：
+$Dlati_i=\frac{90}{4\times NZ-i}= \begin{cases} 0, & \mbox{偶编码} \\ 1, & \mbox{奇编码} \end{cases}$\newline
+(2)计算纬度索引 j 。\newline
+$j=floor(\frac{lat_s}{Dlat_i})+floor[\frac{1}{2}+\frac{MOD(lat_s,Dlat_i)}{Dlat_i}-\frac{YZ_i}{2^17}]$
+纬度索引 j 的值与参考点的纬度lats的取值有关。\newline 
+(3)解码纬度位置$Rlat_i$。\newline
+$Rlat_i=Dlat_i\times(j+\frac{YZ_i}{2^{17}})$
+本地解码后的纬度位置$Rlat_i$与参考点的纬度lats的取值有关。\newline 
+(4)由$Rlat_i$确定东西向经度 Zone 的尺寸$Dlon_i$。\newline
+
+空中位置:
+$Dlati_i= \begin{cases} \frac{360}{[NL(Rlat_i)-i}, & NL(Rlat_i)-i>0 \\ 360, & NL(Rlat_i)-i=0 \end{cases}$\newline
+
+地面位置:
+$Dlati_i= \begin{cases} \frac{90}{[NL(Rlat_i)-i}, & NL(Rlat_i)-i>0 \\ 90, & NL(Rlat_i)-i=0 \end{cases}$\newline
+
+(5)采用参考点的经度 lons 、$Dlon_i$和XZi计算经度索引 m 。\newline
+$m=floor(\frac{lon_s}{Dlon_i})+floor[\frac{1}{2}+\frac{MOD(lon_s,Dlon_i)}{Dlon_i}-\frac{XZ_i}{2^{17}}]$;经度索引m 的值与参考点的经度lons 的取值有关。\newline 
+(6)解码经度位置$Rlon_i$。\newline
+$Rlon_i=Dlon_i\times(m+\frac{XZ_i}{2^{17}})$;本地解码后的经度位置$Rlon_i$与参考点的经度 lons 的取值有关。 
+
+\subsection{可视化文件类型转换模块}
+step1:创建装换类中的飞机消息格式内部类；\newline
+step2:在转换的类中编写创建.kml文件的函数且将飞机消息格式内部类作为函数的输入参数；\newline
+step3:通过添加函数把解码出来的信息对应放在创建.kml文件的函数的参数的飞机消息格式内部类的各个部分；
+
+\section{算法编程}
+\subsection{加解密部分}
+\subsubsection{F函数部分代码}
+
+\input{chapters/2f.py.tex}
+        
+F函数的步骤是首先对各个变量进行赋值：
+t = $|T|$；
+beta = $\lceil n/2 \rceil$；
+b = $\lceil \lceil beta log_2(radix)\rceil /8 \rceil$；
+d = 4 * $\lceil b/4 \rceil$；
+如果i是偶数：m = $\lfloor n/2 \rfloor$；
+如果i是奇数: m = $\lceil n/2 \rceil$；
+P是vers、method、addition、radix、rnds(n)、split(n)、n、t的连接；
+Q是T、0、i、B的连接；
+Y = CBC-$MAC_K$(P$\parallel$Q)；
+Y = first d + 4 bytes of($Y \parallel AES_K(Y+[1]^{16})\parallel AES_K(Y + [2]^{16} \parallelAES_K(Y+[3]^{16})\cdots$)；
+y = $NUM_2(Y)$；
+z = y mod $radix^m$；
+z = $STR_radix^m(z)$；      
+F函数的作用是对输入的其中的一半消息A或者B进行基于AES加密和参数连接的变化，且输出长度与输入长度一致的输出值，让同样长度的输出值进入下一轮迭代，每一轮的输出的长度都相等。
+       
+\subsubsection{加密函数部分代码}
+
+\input{chapters/3en.py.tex}
+
+为加密过程中需要用到的各个参数赋值：
+n = X的长度;
+l = 分开的块的块大小，这里为输入原文的一半;
+A、B分别为输入原文的前半段和后半段;
+然后对A、B进行r轮的迭代变换，最后再把经过r轮变换的A、B连接在一起组成和输入原文长度一致的输出值。
+\subsubsection{解密函数部分代码}
+       
+\input{chapters/4de.py.tex}
+        
+同理对n、l、r三个变量赋值,在解密中，与加密不同的是A这时被赋值为密文的后半段，B被赋值为前半段;循环也是与加密中的循环流程相反.        
+\subsubsection{把加密部分的代码植入java的解码和可视化系统中}
+
+\input{chapters/5mode.java.tex}  
+
+\subsection{解码部分}
+step1:确定输入的ADS-B消息是奇数帧还是偶数帧，只有连续的两个ADS-B消息一个为奇数帧一个为偶数帧才利用这两条ADS-B消息进行位置解码，这就是为什么.avro文件在用来解码前要先利用OpenSky提供的函数对.avro文件中的数据进行排序的原因。\newline
+step2：再判断该ADS-B消息适用于全球解码或者本地解码，根据其特征对其使用不同的解码方式。
+
+\input{chapters/6decoder.java.tex}
+
+\subsubsection{全球解码}
+
+\input{chapters/7glodecoder.java.tex}
+			
+\subsubsection{本地解码}
+
+\input{chapters/8locdecoder.java.tex}
+
+\subsection{可视化文件类型转换部分}
+
+\input{chapters/9avro2kml.java.tex}
+
+\section{本章小结}
+本章首先介绍了本系统的建立的基础，即三个主要依据的模型，分别是系统模型、网络模型和ADS-B模型，这些模型为系统假设了一个理想的设计应用环境模型。主要对本系统的加解密模块、解码模块以及可视化模块的设计原理以及具体编程算法进行详细的介绍。

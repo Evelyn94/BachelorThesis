@@ -1,0 +1,65 @@
+public Position getGlobalPosition(SurfacePositionMsg other) throws MissingInformationException, 
+	PositionStraddleError, BadFormatException {
+	if (!tools.areEqual(other.getIcao24(), getIcao24()))
+			throw new IllegalArgumentException(
+					String.format("Transmitter of other message (%s) not equal to this (%s).",
+					tools.toHexString(other.getIcao24()), tools.toHexString(this.getIcao24())));
+		
+	if (other.isOddFormat() == this.isOddFormat())
+		throw new BadFormatException("Expected "+(isOddFormat()?"even":"odd")+" message format.", other.toString());
+
+	if (!horizontal_position_available)
+		throw new MissingInformationException("No position information available!");
+	if (!other.hasPosition())
+		throw new MissingInformationException("Other message has no position information.");
+
+	SurfacePositionMsg even = isOddFormat()?other:this;
+	SurfacePositionMsg odd = isOddFormat()?this:other;
+
+	// Helper for latitude single(Number of zones NZ is set to 15)
+	double Dlat0 = 90.0/60.0;
+	double Dlat1 = 90.0/59.0;
+
+	// latitude index
+	double j = Math.floor((59.0*even.getCPREncodedLatitude()-60.0*odd.getCPREncodedLatitude())/((double)(1<<17))+0.5);
+
+	// global latitudes
+	double Rlat0 = Dlat0 * (mod(j,60)+even.getCPREncodedLatitude()/((double)(1<<17)));
+	double Rlat1 = Dlat1 * (mod(j,59)+odd.getCPREncodedLatitude()/((double)(1<<17)));
+
+	// Southern hemisphere?
+	if (Rlat0 >= 270 && Rlat0 <= 360) Rlat0 -= 360;
+	if (Rlat1 >= 270 && Rlat1 <= 360) Rlat1 -= 360;
+
+	// Northern hemisphere?
+	if (Rlat0 <= -270 && Rlat0 >= -360) Rlat0 += 360;
+	if (Rlat1 <= -270 && Rlat1 >= -360) Rlat1 += 360;
+
+	// ensure that the number of even longitude zones are equal
+	if (NL(Rlat0) != NL(Rlat1))
+		throw new org.opensky.libadsb.exceptions.PositionStraddleError(
+			"The two given position straddle a transition latitude "+
+			"and cannot be decoded. Wait for positions where they are equal.");
+
+	// Helper for longitude
+	double Dlon0 = 90.0/Math.max(1.0, NL(Rlat0));
+	double Dlon1 = 90.0/Math.max(1.0, NL(Rlat1)-1);
+
+	// longitude index
+	double NL_helper = NL(isOddFormat()?Rlat1:Rlat0); // assuming that this is the newer message
+	double m = Math.floor((even.getCPREncodedLongitude()*(NL_helper-1)-odd.getCPREncodedLongitude()*NL_helper)/((double)(1<<17))+0.5);
+
+	// global longitude
+	double Rlon0 = Dlon0 * (mod(m,Math.max(1.0, NL(Rlat0))) + even.getCPREncodedLongitude()/((double)(1<<17)));
+	double Rlon1 = Dlon1 * (mod(m,Math.max(1.0, NL(Rlat1)-1)) + odd.getCPREncodedLongitude()/((double)(1<<17)));
+
+	// correct longitude
+	if (Rlon0 < -180 && Rlon0 > -360) Rlon0 += 360;
+	if (Rlon1 < -180 && Rlon1 > -360) Rlon1 += 360;
+	if (Rlon0 > 180 && Rlon0 < 360) Rlon0 -= 360;
+	if (Rlon1 > 180 && Rlon1 < 360) Rlon1 -= 360;
+
+	return new Position(isOddFormat()?Rlon1:Rlon0,
+						isOddFormat()?Rlat1:Rlat0,
+						0.0);
+}

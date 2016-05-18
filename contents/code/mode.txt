@@ -1,0 +1,359 @@
+public class ModeSEncodedMessage extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"ModeSEncodedMessage\",\"namespace\":\"org.opensky.sample\",\"fields\":[{\"name\":\"sensorType\",\"type\":\"string\"},{\"name\":\"sensorLatitude\",\"type\":[\"double\",\"null\"]},{\"name\":\"sensorLongitude\",\"type\":[\"double\",\"null\"]},{\"name\":\"sensorAltitude\",\"type\":[\"double\",\"null\"]},{\"name\":\"timeAtServer\",\"type\":\"double\"},{\"name\":\"timeAtSensor\",\"type\":[\"double\",\"null\"]},{\"name\":\"timestamp\",\"type\":[\"double\",\"null\"]},{\"name\":\"rawMessage\",\"type\":\"string\"},{\"name\":\"sensorSerialNumber\",\"type\":\"int\"},{\"name\":\"RSSIPacket\",\"type\":[\"double\",\"null\"]},{\"name\":\"RSSIPreamble\",\"type\":[\"double\",\"null\"]},{\"name\":\"SNR\",\"type\":[\"double\",\"null\"]},{\"name\":\"confidence\",\"type\":[\"double\",\"null\"]}]}");
+  public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
+  @Deprecated public java.lang.CharSequence sensorType;
+  @Deprecated public java.lang.Double sensorLatitude;
+  @Deprecated public java.lang.Double sensorLongitude;
+  @Deprecated public java.lang.Double sensorAltitude;
+  @Deprecated public double timeAtServer;
+  @Deprecated public java.lang.Double timeAtSensor;
+  @Deprecated public java.lang.Double timestamp;
+  @Deprecated public java.lang.CharSequence rawMessage;
+  @Deprecated public int sensorSerialNumber;
+  @Deprecated public java.lang.Double RSSIPacket;
+  @Deprecated public java.lang.Double RSSIPreamble;
+  @Deprecated public java.lang.Double SNR;
+  @Deprecated public java.lang.Double confidence;
+
+  /**
+   * Default constructor.  Note that this does not initialize fields
+   * to their default values from the schema.  If that is desired then
+   * one should use <code>newBuilder()</code>. 
+   */
+  public ModeSEncodedMessage() {}
+  private  CharSequence FFXEncrypt(CharSequence rawMessage){
+    System.err.println("unencrypted raw message is " + rawMessage);
+    try {
+      Process proc = Runtime.getRuntime().exec("python \"C:\\Users\\Serlina\\PycharmProjects\\FinalyearProject\\ADS-B out\\libffx\\example.py\" " + rawMessage);
+      BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+      rawMessage = bufferedReader.readLine();
+      proc.waitFor();
+    }
+    catch (Exception e){
+      e.printStackTrace();
+    }
+    System.err.println("encrypted raw message is " + rawMessage);
+    return rawMessage;
+  }
+  private  CharSequence FFXDecrypt(CharSequence encryptedMessage){
+    System.err.println("encrypted raw message is " + encryptedMessage);
+    try {
+      Process proc = Runtime.getRuntime().exec("python \"C:\\Users\\Serlina\\PycharmProjects\\FinalyearProject\\ADS-B in\\libffx\\example.py\" " + encryptedMessage);
+      BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+      rawMessage = bufferedReader.readLine();
+      proc.waitFor();
+    }
+    catch (Exception e){
+      e.printStackTrace();
+    }
+    System.err.println("decrypted raw message is " + rawMessage);
+    return rawMessage;
+  }
+  /**
+   * All-args constructor.
+   */
+  public ModeSEncodedMessage(java.lang.CharSequence sensorType, java.lang.Double sensorLatitude, java.lang.Double sensorLongitude, java.lang.Double sensorAltitude, java.lang.Double timeAtServer, java.lang.Double timeAtSensor, java.lang.Double timestamp, java.lang.CharSequence rawMessage, java.lang.Integer sensorSerialNumber, java.lang.Double RSSIPacket, java.lang.Double RSSIPreamble, java.lang.Double SNR, java.lang.Double confidence) {
+    this.sensorType = sensorType;
+    this.sensorLatitude = sensorLatitude;
+    this.sensorLongitude = sensorLongitude;
+    this.sensorAltitude = sensorAltitude;
+    this.timeAtServer = timeAtServer;
+    this.timeAtSensor = timeAtSensor;
+    this.timestamp = timestamp;
+    this.rawMessage = rawMessage;
+    this.sensorSerialNumber = sensorSerialNumber;
+    this.RSSIPacket = RSSIPacket;
+    this.RSSIPreamble = RSSIPreamble;
+    this.SNR = SNR;
+    this.confidence = confidence;
+  }
+
+  public org.apache.avro.Schema getSchema() { return SCHEMA$; }
+  // Used by DatumWriter.  Applications should not call. 
+  public java.lang.Object get(int field$) {
+    switch (field$) {
+    case 0: return sensorType;
+    case 1: return sensorLatitude;
+    case 2: return sensorLongitude;
+    case 3: return sensorAltitude;
+    case 4: return timeAtServer;
+    case 5: return timeAtSensor;
+    case 6: return timestamp;
+    case 7: return rawMessage;
+    case 8: return sensorSerialNumber;
+    case 9: return RSSIPacket;
+    case 10: return RSSIPreamble;
+    case 11: return SNR;
+    case 12: return confidence;
+    default: throw new org.apache.avro.AvroRuntimeException("Bad index");
+    }
+  }
+  // Used by DatumReader.  Applications should not call. 
+  @SuppressWarnings(value="unchecked")
+  public void put(int field$, java.lang.Object value$) {
+    switch (field$) {
+    case 0: sensorType = (java.lang.CharSequence)value$; break;
+    case 1: sensorLatitude = (java.lang.Double)value$; break;
+    case 2: sensorLongitude = (java.lang.Double)value$; break;
+    case 3: sensorAltitude = (java.lang.Double)value$; break;
+    case 4: timeAtServer = (java.lang.Double)value$; break;
+    case 5: timeAtSensor = (java.lang.Double)value$; break;
+    case 6: timestamp = (java.lang.Double)value$; break;
+    case 7: rawMessage = (java.lang.CharSequence)value$; break;
+    case 8: sensorSerialNumber = (java.lang.Integer)value$; break;
+    case 9: RSSIPacket = (java.lang.Double)value$; break;
+    case 10: RSSIPreamble = (java.lang.Double)value$; break;
+    case 11: SNR = (java.lang.Double)value$; break;
+    case 12: confidence = (java.lang.Double)value$; break;
+    default: throw new org.apache.avro.AvroRuntimeException("Bad index");
+    }
+  }
+
+  /**
+   * Gets the value of the 'sensorType' field.
+   */
+  public java.lang.CharSequence getSensorType() {
+    return sensorType;
+  }
+
+  /**
+   * Sets the value of the 'sensorType' field.
+   * @param value the value to set.
+   */
+  public void setSensorType(java.lang.CharSequence value) {
+    this.sensorType = value;
+  }
+
+...
+...
+...
+
+  /**
+   * Gets the value of the 'rawMessage' field.
+   */
+  public java.lang.CharSequence getRawMessage() {
+    return FFXEncrypt(rawMessage);
+  }
+
+  /**
+   * Sets the value of the 'rawMessage' field.
+   * @param value the value to set.
+   */
+  public void setRawMessage(java.lang.CharSequence value) {
+    this.rawMessage = value;
+  }
+  
+...
+...
+...
+
+  /**
+   * Gets the value of the 'confidence' field.
+   */
+  public java.lang.Double getConfidence() {
+    return confidence;
+  }
+
+  /**
+   * Sets the value of the 'confidence' field.
+   * @param value the value to set.
+   */
+  public void setConfidence(java.lang.Double value) {
+    this.confidence = value;
+  }
+
+  /** Creates a new ModeSEncodedMessage RecordBuilder */
+  public static org.opensky.example.ModeSEncodedMessage.Builder newBuilder() {
+    return new org.opensky.example.ModeSEncodedMessage.Builder();
+  }
+  
+  /** Creates a new ModeSEncodedMessage RecordBuilder by copying an existing Builder */
+  public static org.opensky.example.ModeSEncodedMessage.Builder newBuilder(org.opensky.example.ModeSEncodedMessage.Builder other) {
+    return new org.opensky.example.ModeSEncodedMessage.Builder(other);
+  }
+  
+  /** Creates a new ModeSEncodedMessage RecordBuilder by copying an existing ModeSEncodedMessage instance */
+  public static org.opensky.example.ModeSEncodedMessage.Builder newBuilder(org.opensky.example.ModeSEncodedMessage other) {
+    return new org.opensky.example.ModeSEncodedMessage.Builder(other);
+  }
+  
+  /**
+   * RecordBuilder for ModeSEncodedMessage instances.
+   */
+  public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<ModeSEncodedMessage>
+    implements org.apache.avro.data.RecordBuilder<ModeSEncodedMessage> {
+
+    private java.lang.CharSequence sensorType;
+    private java.lang.Double sensorLatitude;
+    private java.lang.Double sensorLongitude;
+    private java.lang.Double sensorAltitude;
+    private double timeAtServer;
+    private java.lang.Double timeAtSensor;
+    private java.lang.Double timestamp;
+    private java.lang.CharSequence rawMessage;
+    private int sensorSerialNumber;
+    private java.lang.Double RSSIPacket;
+    private java.lang.Double RSSIPreamble;
+    private java.lang.Double SNR;
+    private java.lang.Double confidence;
+
+    /** Creates a new Builder */
+    private Builder() {
+      super(org.opensky.example.ModeSEncodedMessage.SCHEMA$);
+    }
+    
+    /** Creates a Builder by copying an existing Builder */
+    private Builder(org.opensky.example.ModeSEncodedMessage.Builder other) {
+      super(other);
+      if (isValidValue(fields()[0], other.sensorType)) {
+        this.sensorType = data().deepCopy(fields()[0].schema(), other.sensorType);
+        fieldSetFlags()[0] = true;
+      }
+
+...
+...
+...
+      if (isValidValue(fields()[7], other.rawMessage)) {
+        this.rawMessage = data().deepCopy(fields()[7].schema(), other.rawMessage);
+        fieldSetFlags()[7] = true;
+      }
+...
+...
+...
+      if (isValidValue(fields()[12], other.confidence)) {
+        this.confidence = data().deepCopy(fields()[12].schema(), other.confidence);
+        fieldSetFlags()[12] = true;
+      }
+    }
+    
+    /** Creates a Builder by copying an existing ModeSEncodedMessage instance */
+    private Builder(org.opensky.example.ModeSEncodedMessage other) {
+            super(org.opensky.example.ModeSEncodedMessage.SCHEMA$);
+      if (isValidValue(fields()[0], other.sensorType)) {
+        this.sensorType = data().deepCopy(fields()[0].schema(), other.sensorType);
+        fieldSetFlags()[0] = true;
+      }
+
+...
+...
+...
+      if (isValidValue(fields()[7], other.rawMessage)) {
+        this.rawMessage = data().deepCopy(fields()[7].schema(), other.rawMessage);
+        fieldSetFlags()[7] = true;
+      }
+...
+...
+...
+      if (isValidValue(fields()[12], other.confidence)) {
+        this.confidence = data().deepCopy(fields()[12].schema(), other.confidence);
+        fieldSetFlags()[12] = true;
+      }
+    }
+
+    /** Gets the value of the 'sensorType' field */
+    public java.lang.CharSequence getSensorType() {
+      return sensorType;
+    }
+    
+    /** Sets the value of the 'sensorType' field */
+    public org.opensky.example.ModeSEncodedMessage.Builder setSensorType(java.lang.CharSequence value) {
+      validate(fields()[0], value);
+      this.sensorType = value;
+      fieldSetFlags()[0] = true;
+      return this; 
+    }
+    
+    /** Checks whether the 'sensorType' field has been set */
+    public boolean hasSensorType() {
+      return fieldSetFlags()[0];
+    }
+    
+    /** Clears the value of the 'sensorType' field */
+    public org.opensky.example.ModeSEncodedMessage.Builder clearSensorType() {
+      sensorType = null;
+      fieldSetFlags()[0] = false;
+      return this;
+    }
+
+...
+...
+...
+
+    /** Gets the value of the 'rawMessage' field */
+    public java.lang.CharSequence getRawMessage() {
+      return rawMessage;
+    }
+    
+    /** Sets the value of the 'rawMessage' field */
+    public org.opensky.example.ModeSEncodedMessage.Builder setRawMessage(java.lang.CharSequence value) {
+      validate(fields()[7], value);
+      this.rawMessage = value;
+      fieldSetFlags()[7] = true;
+      return this; 
+    }
+    
+    /** Checks whether the 'rawMessage' field has been set */
+    public boolean hasRawMessage() {
+      return fieldSetFlags()[7];
+    }
+    
+    /** Clears the value of the 'rawMessage' field */
+    public org.opensky.example.ModeSEncodedMessage.Builder clearRawMessage() {
+      rawMessage = null;
+      fieldSetFlags()[7] = false;
+      return this;
+    }
+
+...
+...
+...
+
+    /** Gets the value of the 'confidence' field */
+    public java.lang.Double getConfidence() {
+      return confidence;
+    }
+    
+    /** Sets the value of the 'confidence' field */
+    public org.opensky.example.ModeSEncodedMessage.Builder setConfidence(java.lang.Double value) {
+      validate(fields()[12], value);
+      this.confidence = value;
+      fieldSetFlags()[12] = true;
+      return this; 
+    }
+    
+    /** Checks whether the 'confidence' field has been set */
+    public boolean hasConfidence() {
+      return fieldSetFlags()[12];
+    }
+    
+    /** Clears the value of the 'confidence' field */
+    public org.opensky.example.ModeSEncodedMessage.Builder clearConfidence() {
+      confidence = null;
+      fieldSetFlags()[12] = false;
+      return this;
+    }
+
+    @Override
+    public ModeSEncodedMessage build() {
+      try {
+        ModeSEncodedMessage record = new ModeSEncodedMessage();
+        record.sensorType = fieldSetFlags()[0] ? this.sensorType : (java.lang.CharSequence) defaultValue(fields()[0]);
+        record.sensorLatitude = fieldSetFlags()[1] ? this.sensorLatitude : (java.lang.Double) defaultValue(fields()[1]);
+        record.sensorLongitude = fieldSetFlags()[2] ? this.sensorLongitude : (java.lang.Double) defaultValue(fields()[2]);
+        record.sensorAltitude = fieldSetFlags()[3] ? this.sensorAltitude : (java.lang.Double) defaultValue(fields()[3]);
+        record.timeAtServer = fieldSetFlags()[4] ? this.timeAtServer : (java.lang.Double) defaultValue(fields()[4]);
+        record.timeAtSensor = fieldSetFlags()[5] ? this.timeAtSensor : (java.lang.Double) defaultValue(fields()[5]);
+        record.timestamp = fieldSetFlags()[6] ? this.timestamp : (java.lang.Double) defaultValue(fields()[6]);
+        record.rawMessage = fieldSetFlags()[7] ? this.rawMessage : (java.lang.CharSequence) defaultValue(fields()[7]);
+        record.sensorSerialNumber = fieldSetFlags()[8] ? this.sensorSerialNumber : (java.lang.Integer) defaultValue(fields()[8]);
+        record.RSSIPacket = fieldSetFlags()[9] ? this.RSSIPacket : (java.lang.Double) defaultValue(fields()[9]);
+        record.RSSIPreamble = fieldSetFlags()[10] ? this.RSSIPreamble : (java.lang.Double) defaultValue(fields()[10]);
+        record.SNR = fieldSetFlags()[11] ? this.SNR : (java.lang.Double) defaultValue(fields()[11]);
+        record.confidence = fieldSetFlags()[12] ? this.confidence : (java.lang.Double) defaultValue(fields()[12]);
+        return record;
+      } catch (Exception e) {
+        throw new org.apache.avro.AvroRuntimeException(e);
+      }
+    }
+  }
+}

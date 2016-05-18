@@ -1,0 +1,369 @@
+{
+\tt
+{\hlstd {\hllin 01\ }public\ class\ Avro2Kml\ $\{$}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 02\ }\ /**\leavevmode\par
+{\hllin 03\ }}{\hlstd\ \ }{\hlstd *\ This\ class\ is\ a\ container\ for\ all\ information\leavevmode\par
+{\hllin 04\ }}{\hlstd\ \ }{\hlstd *\ about\ flights\ that\ are\ relevant\ for\ the\ KML\leavevmode\par
+{\hllin 05\ }}{\hlstd\ \ }{\hlstd *\ generation\leavevmode\par
+{\hllin 06\ }}{\hlstd\ \ }{\hlstd */\leavevmode\par
+{\hllin 07\ }\ private\ class\ Flight\ $\{$\leavevmode\par
+{\hllin 08\ }}{\hlstd\ \ }{\hlstd public\ String\ icao24;\leavevmode\par
+{\hllin 09\ }}{\hlstd\ \ }{\hlstd public\ char[]\ callsign;\leavevmode\par
+{\hllin 10\ }}{\hlstd\ \ }{\hlstd public\ double\ first;\ //\ first\ message\ seen\leavevmode\par
+{\hllin 11\ }}{\hlstd\ \ }{\hlstd public\ double\ last;\ //\ last\ message\ seen\leavevmode\par
+{\hllin 12\ }}{\hlstd\ \ }{\hlstd public\ List$\mathord{<}$Coordinate$\mathord{>}$\ coords;\ //\ ordered\ list\ of\ coordinates\leavevmode\par
+{\hllin 13\ }}{\hlstd\ \ }{\hlstd public\ List$\mathord{<}$Integer$\mathord{>}$\ serials;\ //\ flight\ seen\ by\ these\ sensors\leavevmode\par
+{\hllin 14\ }}{\hlstd\ \ }{\hlstd public\ PositionDecoder\ dec;\ //\ stateful\ position\ decoder\leavevmode\par
+{\hllin 15\ }}{\hlstd\ \ }{\hlstd boolean\ contains\_{}unreasonable;\ //\ true\ if\ there\ was\ one\ position\ with\ unreasonable\ flag\leavevmode\par
+{\hllin 16\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 17\ }}{\hlstd\ \ }{\hlstd public\ Flight\ ()\ $\{$\leavevmode\par
+{\hllin 18\ }}{\hlstd\ \ \ }{\hlstd coords\ $\mathord{=}$\ new\ ArrayList$\mathord{<}$Coordinate$\mathord{>}$();\leavevmode\par
+{\hllin 19\ }}{\hlstd\ \ \ }{\hlstd dec\ $\mathord{=}$\ new\ PositionDecoder();\leavevmode\par
+{\hllin 20\ }}{\hlstd\ \ \ }{\hlstd callsign\ $\mathord{=}$\ new\ char[0];\leavevmode\par
+{\hllin 21\ }}{\hlstd\ \ \ }{\hlstd contains\_{}unreasonable\ $\mathord{=}$\ false;\leavevmode\par
+{\hllin 22\ }}{\hlstd\ \ \ }{\hlstd serials\ $\mathord{=}$\ new\ ArrayList$\mathord{<}$Integer$\mathord{>}$();\leavevmode\par
+{\hllin 23\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 24\ }\ $\}$\leavevmode\par
+{\hllin 25\ }\ \leavevmode\par
+{\hllin 26\ }\ /**\leavevmode\par
+{\hllin 27\ }}{\hlstd\ \ }{\hlstd *\ Class\ for\ generating\ the\ kml\leavevmode\par
+{\hllin 28\ }}{\hlstd\ \ }{\hlstd */\leavevmode\par
+{\hllin 29\ }\ private\ class\ OskyKml\ $\{$\leavevmode\par
+{\hllin 30\ }}{\hlstd\ \ }{\hlstd private\ Kml\ kml;\leavevmode\par
+{\hllin 31\ }}{\hlstd\ \ }{\hlstd private\ Document\ doc;\leavevmode\par
+{\hllin 32\ }}{\hlstd\ \ }{\hlstd private\ Style\ style;\leavevmode\par
+{\hllin 33\ }}{\hlstd\ \ }{\hlstd private\ SimpleDateFormat\ date\_{}formatter;\leavevmode\par
+{\hllin 34\ }}{\hlstd\ \ }{\hlstd private\ Folder\ unreasonable;\leavevmode\par
+{\hllin 35\ }}{\hlstd\ \ }{\hlstd private\ Folder\ reasonable;\leavevmode\par
+{\hllin 36\ }}{\hlstd\ \ }{\hlstd private\ Folder\ empty;\leavevmode\par
+{\hllin 37\ }}{\hlstd\ \ }{\hlstd private\ int\ num\_{}flights;\leavevmode\par
+{\hllin 38\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 39\ }}{\hlstd\ \ }{\hlstd public\ OskyKml\ ()\ $\{$\leavevmode\par
+{\hllin 40\ }}{\hlstd\ \ \ }{\hlstd //\ prepare\ KML\leavevmode\par
+{\hllin 41\ }}{\hlstd\ \ \ }{\hlstd kml\ $\mathord{=}$\ new\ Kml();\leavevmode\par
+{\hllin 42\ }}{\hlstd\ \ \ }{\hlstd doc\ $\mathord{=}$\ kml.createAndSetDocument()\leavevmode\par
+{\hllin 43\ }}{\hlstd\ \ \ \ \ }{\hlstd .withName("OpenSky\ Network");\leavevmode\par
+{\hllin 44\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 45\ }}{\hlstd\ \ \ }{\hlstd style\ $\mathord{=}$\ doc.createAndAddStyle()\leavevmode\par
+{\hllin 46\ }}{\hlstd\ \ \ \ \ }{\hlstd .withId("reasonable");\leavevmode\par
+{\hllin 47\ }}{\hlstd\ \ \ }{\hlstd style.createAndSetLineStyle()\leavevmode\par
+{\hllin 48\ }}{\hlstd\ \ \ }{\hlstd .withColor("ffffffff")\leavevmode\par
+{\hllin 49\ }}{\hlstd\ \ \ }{\hlstd .withColorMode(ColorMode.NORMAL)\leavevmode\par
+{\hllin 50\ }}{\hlstd\ \ \ }{\hlstd .withWidth(1);\leavevmode\par
+{\hllin 51\ }\leavevmode\par
+{\hllin 52\ }}{\hlstd\ \ \ }{\hlstd style\ $\mathord{=}$\ doc.createAndAddStyle()\leavevmode\par
+{\hllin 53\ }}{\hlstd\ \ \ \ \ }{\hlstd .withId("unreasonable");\leavevmode\par
+{\hllin 54\ }}{\hlstd\ \ \ }{\hlstd style.createAndSetLineStyle()\leavevmode\par
+{\hllin 55\ }}{\hlstd\ \ \ }{\hlstd .withColor("ffd5d5ff")\leavevmode\par
+{\hllin 56\ }}{\hlstd\ \ \ }{\hlstd .withColorMode(ColorMode.NORMAL)\leavevmode\par
+{\hllin 57\ }}{\hlstd\ \ \ }{\hlstd .withWidth(1);\leavevmode\par
+{\hllin 58\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 59\ }}{\hlstd\ \ \ }{\hlstd unreasonable\ $\mathord{=}$\ doc.createAndAddFolder()\leavevmode\par
+{\hllin 60\ }}{\hlstd\ \ \ \ \ }{\hlstd .withName("Unreasonable\ Flights");\leavevmode\par
+{\hllin 61\ }}{\hlstd\ \ \ }{\hlstd reasonable\ $\mathord{=}$\ doc.createAndAddFolder()\leavevmode\par
+{\hllin 62\ }}{\hlstd\ \ \ \ \ }{\hlstd .withName("Reasonable\ Flights");\leavevmode\par
+{\hllin 63\ }}{\hlstd\ \ \ }{\hlstd empty\ $\mathord{=}$\ doc.createAndAddFolder()\leavevmode\par
+{\hllin 64\ }}{\hlstd\ \ \ \ \ }{\hlstd .withName("No\ Positions");\leavevmode\par
+{\hllin 65\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 66\ }}{\hlstd\ \ \ }{\hlstd date\_{}formatter\ $\mathord{=}$\ new\ SimpleDateFormat("yyyy$\mathord{-}$MM$\mathord{-}$dd'T'HH:mm:ssZ");\leavevmode\par
+{\hllin 67\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 68\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 69\ }}{\hlstd\ \ }{\hlstd public\ void\ addFlight(Flight\ flight)\ $\{$\leavevmode\par
+{\hllin 70\ }}{\hlstd\ \ \ }{\hlstd Date\ begin\ $\mathord{=}$\ new\ Date((long)(flight.first*1000));\leavevmode\par
+{\hllin 71\ }}{\hlstd\ \ \ }{\hlstd Date\ end\ $\mathord{=}$\ new\ Date((long)(flight.last*1000));\leavevmode\par
+{\hllin 72\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 73\ }}{\hlstd\ \ \ }{\hlstd Folder\ which;\leavevmode\par
+{\hllin 74\ }}{\hlstd\ \ \ }{\hlstd if\ (flight.coords.size()$\mathord{>}$0)\leavevmode\par
+{\hllin 75\ }}{\hlstd\ \ \ \ }{\hlstd which\ $\mathord{=}$\ flight.contains\_{}unreasonable\ ?\ unreasonable\ :\ reasonable;\leavevmode\par
+{\hllin 76\ }}{\hlstd\ \ \ }{\hlstd else\ which\ $\mathord{=}$\ empty;\leavevmode\par
+{\hllin 77\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 78\ }}{\hlstd\ \ \ }{\hlstd String\ description\ $\mathord{=}$\ "ICAO:\ "$\mathord{+}$flight.icao24$\mathord{+}$"$\mathord{<}$br\ /$\mathord{>}$$\backslash$n"$\mathord{+}$\leavevmode\par
+{\hllin 79\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd "Callsign:\ "$\mathord{+}$new\ String(flight.callsign)$\mathord{+}$"$\mathord{<}$br\ /$\mathord{>}$$\backslash$n"$\mathord{+}$\leavevmode\par
+{\hllin 80\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd "First\ seen:\ "$\mathord{+}$begin.toString()$\mathord{+}$"$\mathord{<}$br\ /$\mathord{>}$$\backslash$n"$\mathord{+}$\leavevmode\par
+{\hllin 81\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd "Last\ seen:\ "$\mathord{+}$end.toString()$\mathord{+}$"$\mathord{<}$br\ /$\mathord{>}$$\backslash$n"$\mathord{+}$\leavevmode\par
+{\hllin 82\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd "Seen\ by\ serials:\ "$\mathord{+}$StringUtils.join(flight.serials,\ ",");\leavevmode\par
+{\hllin 83\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 84\ }}{\hlstd\ \ \ }{\hlstd Placemark\ placemark\ $\mathord{=}$\ which.createAndAddPlacemark()\leavevmode\par
+{\hllin 85\ }}{\hlstd\ \ \ \ \ }{\hlstd .withName(flight.icao24)\leavevmode\par
+{\hllin 86\ }}{\hlstd\ \ \ \ \ }{\hlstd .withTimePrimitive(new\ TimeSpan()\leavevmode\par
+{\hllin 87\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd .withBegin(date\_{}formatter.format(begin))\leavevmode\par
+{\hllin 88\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd .withEnd(date\_{}formatter.format(end)))\leavevmode\par
+{\hllin 89\ }}{\hlstd\ \ \ \ \ }{\hlstd .withDescription(description)\leavevmode\par
+{\hllin 90\ }}{\hlstd\ \ \ \ \ }{\hlstd .withStyleUrl(flight.contains\_{}unreasonable\ ?\ "\#{}unreasonable"\ :\ "\#{}reasonable");\leavevmode\par
+{\hllin 91\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 92\ }}{\hlstd\ \ \ }{\hlstd placemark.createAndSetLineString()\leavevmode\par
+{\hllin 93\ }}{\hlstd\ \ \ \ }{\hlstd .withCoordinates(flight.coords)\leavevmode\par
+{\hllin 94\ }}{\hlstd\ \ \ \ }{\hlstd .withAltitudeMode(AltitudeMode.fromValue(AltitudeMode.ABSOLUTE.value()))\leavevmode\par
+{\hllin 95\ }}{\hlstd\ \ \ \ }{\hlstd .withId(flight.icao24)\leavevmode\par
+{\hllin 96\ }}{\hlstd\ \ \ \ }{\hlstd .withExtrude(false);\leavevmode\par
+{\hllin 97\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 98\ }}{\hlstd\ \ \ }{\hlstd num\_{}flights$\mathord{+}$$\mathord{+}$;\leavevmode\par
+{\hllin 99\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 100\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 101\ }}{\hlstd\ \ }{\hlstd public\ void\ writeToFile(File\ file)\ $\{$\leavevmode\par
+{\hllin 102\ }}{\hlstd\ \ \ }{\hlstd try\ $\{$\leavevmode\par
+{\hllin 103\ }}{\hlstd\ \ \ \ }{\hlstd kml.marshal(file);\leavevmode\par
+{\hllin 104\ }}{\hlstd\ \ \ }{\hlstd $\}$\ catch\ (FileNotFoundException\ e)\ $\{$\leavevmode\par
+{\hllin 105\ }}{\hlstd\ \ \ \ }{\hlstd System.err.println("Could\ not\ write\ to\ file\ '"$\mathord{+}$file.getAbsolutePath()$\mathord{+}$"'.$\backslash$nReason:\ "$\mathord{+}$e.toString());\leavevmode\par
+{\hllin 106\ }}{\hlstd\ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 107\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 108\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 109\ }}{\hlstd\ \ }{\hlstd public\ int\ getNumberOfFlights()\ $\{$\leavevmode\par
+{\hllin 110\ }}{\hlstd\ \ \ }{\hlstd return\ num\_{}flights;\leavevmode\par
+{\hllin 111\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 112\ }\ $\}$\leavevmode\par
+{\hllin 113\ }\leavevmode\par
+{\hllin 114\ }\ public\ static\ void\ main(String[]\ args)\ $\{$\leavevmode\par
+{\hllin 115\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 116\ }}{\hlstd\ \ }{\hlstd //\ define\ command\ line\ options\leavevmode\par
+{\hllin 117\ }}{\hlstd\ \ }{\hlstd Options\ opts\ $\mathord{=}$\ new\ Options();\leavevmode\par
+{\hllin 118\ }}{\hlstd\ \ }{\hlstd opts.addOption("h",\ "help",\ false,\ "print\ this\ message"\ );\leavevmode\par
+{\hllin 119\ }}{\hlstd\ \ }{\hlstd opts.addOption("0",\ "nopos",\ false,\ "do\ not\ include\ flight\ without\ positions"\ );\leavevmode\par
+{\hllin 120\ }}{\hlstd\ \ }{\hlstd opts.addOption("i",\ "icao24",\ true,\ "filter\ by\ icao\ 24$\mathord{-}$bit\ address\ (hex)");\leavevmode\par
+{\hllin 121\ }}{\hlstd\ \ }{\hlstd opts.addOption("s",\ "start",\ true,\ "only\ messages\ received\ after\ this\ time\ (unix\ timestamp)");\leavevmode\par
+{\hllin 122\ }}{\hlstd\ \ }{\hlstd opts.addOption("e",\ "end",\ true,\ "only\ messages\ received\ before\ this\ time\ (unix\ timestamp)");\leavevmode\par
+{\hllin 123\ }}{\hlstd\ \ }{\hlstd opts.addOption("n",\ "max$\mathord{-}$num",\ true,\ "max\ number\ of\ flights\ written\ to\ KML");\leavevmode\par
+{\hllin 124\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 125\ }}{\hlstd\ \ }{\hlstd //\ parse\ command\ line\ options\leavevmode\par
+{\hllin 126\ }}{\hlstd\ \ }{\hlstd CommandLineParser\ parser\ $\mathord{=}$\ new\ DefaultParser();\leavevmode\par
+{\hllin 127\ }}{\hlstd\ \ }{\hlstd CommandLine\ cmd;\leavevmode\par
+{\hllin 128\ }}{\hlstd\ \ }{\hlstd File\ avro\ $\mathord{=}$\ null,\ kmlfile\ $\mathord{=}$\ null;\leavevmode\par
+{\hllin 129\ }}{\hlstd\ \ }{\hlstd String\ filter\_{}icao24\ $\mathord{=}$\ null;\leavevmode\par
+{\hllin 130\ }}{\hlstd\ \ }{\hlstd Long\ filter\_{}max\ $\mathord{=}$\ null;\leavevmode\par
+{\hllin 131\ }}{\hlstd\ \ }{\hlstd Double\ filter\_{}start\ $\mathord{=}$\ null,\ filter\_{}end\ $\mathord{=}$\ null;\leavevmode\par
+{\hllin 132\ }}{\hlstd\ \ }{\hlstd String\ file\ $\mathord{=}$\ null,\ out\ $\mathord{=}$\ null;\leavevmode\par
+{\hllin 133\ }}{\hlstd\ \ }{\hlstd boolean\ option\_{}nopos\ $\mathord{=}$\ true;\leavevmode\par
+{\hllin 134\ }}{\hlstd\ \ }{\hlstd try\ $\{$\leavevmode\par
+{\hllin 135\ }}{\hlstd\ \ \ }{\hlstd cmd\ $\mathord{=}$\ parser.parse(opts,\ args);\leavevmode\par
+{\hllin 136\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 137\ }}{\hlstd\ \ \ }{\hlstd //\ parse\ arguments\leavevmode\par
+{\hllin 138\ }}{\hlstd\ \ \ }{\hlstd try\ $\{$\leavevmode\par
+{\hllin 139\ }}{\hlstd\ \ \ \ }{\hlstd if\ (cmd.hasOption("i"))\ filter\_{}icao24\ $\mathord{=}$\ cmd.getOptionValue("i");\leavevmode\par
+{\hllin 140\ }}{\hlstd\ \ \ \ }{\hlstd if\ (cmd.hasOption("s"))\ filter\_{}start\ $\mathord{=}$\ Double.parseDouble(cmd.getOptionValue("s"));\leavevmode\par
+{\hllin 141\ }}{\hlstd\ \ \ \ }{\hlstd if\ (cmd.hasOption("e"))\ filter\_{}end\ $\mathord{=}$\ Double.parseDouble(cmd.getOptionValue("e"));\leavevmode\par
+{\hllin 142\ }}{\hlstd\ \ \ \ }{\hlstd if\ (cmd.hasOption("n"))\ filter\_{}max\ $\mathord{=}$\ Long.parseLong(cmd.getOptionValue("n"));\leavevmode\par
+{\hllin 143\ }}{\hlstd\ \ \ \ }{\hlstd if\ (cmd.hasOption("0"))\ option\_{}nopos\ $\mathord{=}$\ false;\leavevmode\par
+{\hllin 144\ }}{\hlstd\ \ \ }{\hlstd $\}$\ catch\ (NumberFormatException\ e)\ $\{$\leavevmode\par
+{\hllin 145\ }}{\hlstd\ \ \ \ }{\hlstd throw\ new\ ParseException("Invalid\ arguments:\ "$\mathord{+}$e.getMessage());\leavevmode\par
+{\hllin 146\ }}{\hlstd\ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 147\ }}{\hlstd\ \ \ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 148\ }}{\hlstd\ \ \ }{\hlstd //\ get\ filename\leavevmode\par
+{\hllin 149\ }}{\hlstd\ \ \ }{\hlstd if\ (cmd.getArgList().size()\ !$\mathord{=}$\ 2)\leavevmode\par
+{\hllin 150\ }}{\hlstd\ \ \ \ }{\hlstd throw\ new\ ParseException("No\ avro\ file\ given\ or\ invalid\ arguments.");\leavevmode\par
+{\hllin 151\ }}{\hlstd\ \ \ }{\hlstd file\ $\mathord{=}$\ cmd.getArgList().get(0);\leavevmode\par
+{\hllin 152\ }}{\hlstd\ \ \ }{\hlstd out\ $\mathord{=}$\ cmd.getArgList().get(1);\leavevmode\par
+{\hllin 153\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 154\ }}{\hlstd\ \ }{\hlstd $\}$\ catch\ (ParseException\ e)\ $\{$\leavevmode\par
+{\hllin 155\ }}{\hlstd\ \ \ }{\hlstd //\ parsing\ failed\leavevmode\par
+{\hllin 156\ }}{\hlstd\ \ \ }{\hlstd System.err.println(e.getMessage()$\mathord{+}$"$\backslash$n");\leavevmode\par
+{\hllin 157\ }}{\hlstd\ \ \ }{\hlstd printHelp(opts);\leavevmode\par
+{\hllin 158\ }}{\hlstd\ \ \ }{\hlstd System.exit(1);\leavevmode\par
+{\hllin 159\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 160\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 161\ }}{\hlstd\ \ }{\hlstd System.out.println("Opening\ avro\ file.");\leavevmode\par
+{\hllin 162\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 163\ }}{\hlstd\ \ }{\hlstd //\ check\ if\ file\ exists\leavevmode\par
+{\hllin 164\ }}{\hlstd\ \ }{\hlstd try\ $\{$\leavevmode\par
+{\hllin 165\ }}{\hlstd\ \ \ }{\hlstd avro\ $\mathord{=}$\ new\ File(file);\leavevmode\par
+{\hllin 166\ }}{\hlstd\ \ \ }{\hlstd if(!avro.exists()\ ||\ avro.isDirectory()\ ||\ !avro.canRead())\ $\{$\leavevmode\par
+{\hllin 167\ }}{\hlstd\ \ \ \ }{\hlstd throw\ new\ FileNotFoundException("Avro\ file\ not\ found\ or\ cannot\ be\ read.");\leavevmode\par
+{\hllin 168\ }}{\hlstd\ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 169\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 170\ }}{\hlstd\ \ \ }{\hlstd kmlfile\ $\mathord{=}$\ new\ File(out);\leavevmode\par
+{\hllin 171\ }}{\hlstd\ \ \ }{\hlstd if(kmlfile.exists()\ ||\ kmlfile.isDirectory())\leavevmode\par
+{\hllin 172\ }}{\hlstd\ \ \ \ }{\hlstd throw\ new\ java.io.IOException("KML\ is\ a\ directory\ or\ file\ exists.");\leavevmode\par
+{\hllin 173\ }}{\hlstd\ \ }{\hlstd $\}$\ catch\ (FileNotFoundException\ e)\ $\{$\leavevmode\par
+{\hllin 174\ }}{\hlstd\ \ \ }{\hlstd //\ avro\ file\ not\ found\leavevmode\par
+{\hllin 175\ }}{\hlstd\ \ \ }{\hlstd System.err.println("Error:\ "$\mathord{+}$e.getMessage()$\mathord{+}$"$\backslash$n");\leavevmode\par
+{\hllin 176\ }}{\hlstd\ \ \ }{\hlstd System.exit(1);\leavevmode\par
+{\hllin 177\ }}{\hlstd\ \ }{\hlstd $\}$\ catch\ (IOException\ e)\ $\{$\leavevmode\par
+{\hllin 178\ }}{\hlstd\ \ \ }{\hlstd //\ cannot\ write\ to\ KML\leavevmode\par
+{\hllin 179\ }}{\hlstd\ \ \ }{\hlstd System.err.println("Error:\ "$\mathord{+}$e.getMessage()$\mathord{+}$"$\backslash$n");\leavevmode\par
+{\hllin 180\ }}{\hlstd\ \ \ }{\hlstd System.exit(1);\leavevmode\par
+{\hllin 181\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 182\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 183\ }}{\hlstd\ \ }{\hlstd DatumReader$\mathord{<}$ModeSEncodedMessage$\mathord{>}$\ datumReader\ $\mathord{=}$\ new\ SpecificDatumReader$\mathord{<}$ModeSEncodedMessage$\mathord{>}$(ModeSEncodedMessage.class);\leavevmode\par
+{\hllin 184\ }}{\hlstd\ \ }{\hlstd long\ msgCount\ $\mathord{=}$\ 0,\ good\_{}pos\_{}cnt\ $\mathord{=}$\ 0,\ bad\_{}pos\_{}cnt\ $\mathord{=}$\ 0,\ flights\_{}cnt\ $\mathord{=}$\ 0,\ err\_{}pos\_{}cnt\ $\mathord{=}$\ 0;\leavevmode\par
+{\hllin 185\ }}{\hlstd\ \ }{\hlstd try\ $\{$\leavevmode\par
+{\hllin 186\ }}{\hlstd\ \ \ }{\hlstd DataFileReader$\mathord{<}$ModeSEncodedMessage$\mathord{>}$\ fileReader\ $\mathord{=}$\ new\ DataFileReader$\mathord{<}$ModeSEncodedMessage$\mathord{>}$(avro,\ datumReader);\leavevmode\par
+{\hllin 187\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 188\ }}{\hlstd\ \ \ }{\hlstd System.err.println("Options\ are:$\backslash$n"\ $\mathord{+}$\ \leavevmode\par
+{\hllin 189\ }}{\hlstd\ \ \ \ \ }{\hlstd "$\backslash$tfile:\ "$\mathord{+}$file$\mathord{+}$"$\backslash$n"$\mathord{+}$\leavevmode\par
+{\hllin 190\ }}{\hlstd\ \ \ \ \ }{\hlstd "$\backslash$ticao24:\ "$\mathord{+}$filter\_{}icao24$\mathord{+}$"$\backslash$n"$\mathord{+}$\leavevmode\par
+{\hllin 191\ }}{\hlstd\ \ \ \ \ }{\hlstd "$\backslash$tstart:\ "$\mathord{+}$filter\_{}start$\mathord{+}$"$\backslash$n"$\mathord{+}$\leavevmode\par
+{\hllin 192\ }}{\hlstd\ \ \ \ \ }{\hlstd "$\backslash$tend:\ "$\mathord{+}$filter\_{}end$\mathord{+}$"$\backslash$n"$\mathord{+}$\leavevmode\par
+{\hllin 193\ }}{\hlstd\ \ \ \ \ }{\hlstd "$\backslash$tmax:\ "$\mathord{+}$filter\_{}max$\mathord{+}$"$\backslash$n");\leavevmode\par
+{\hllin 194\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 195\ }}{\hlstd\ \ \ }{\hlstd //\ stuff\ for\ handling\ flights\leavevmode\par
+{\hllin 196\ }}{\hlstd\ \ \ }{\hlstd ModeSEncodedMessage\ record\ $\mathord{=}$\ new\ ModeSEncodedMessage();\leavevmode\par
+{\hllin 197\ }}{\hlstd\ \ \ }{\hlstd HashMap$\mathord{<}$String,\ Flight$\mathord{>}$\ flights\ $\mathord{=}$\ new\ HashMap$\mathord{<}$String,\ Flight$\mathord{>}$();\leavevmode\par
+{\hllin 198\ }}{\hlstd\ \ \ }{\hlstd Flight\ flight;\leavevmode\par
+{\hllin 199\ }}{\hlstd\ \ \ }{\hlstd String\ icao24;\leavevmode\par
+{\hllin 200\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 201\ }}{\hlstd\ \ \ }{\hlstd //\ message\ registers\leavevmode\par
+{\hllin 202\ }}{\hlstd\ \ \ }{\hlstd ModeSReply\ msg;\leavevmode\par
+{\hllin 203\ }}{\hlstd\ \ \ }{\hlstd AirbornePositionMsg\ airpos;\leavevmode\par
+{\hllin 204\ }}{\hlstd\ \ \ }{\hlstd SurfacePositionMsg\ surfacepos;\leavevmode\par
+{\hllin 205\ }}{\hlstd\ \ \ }{\hlstd IdentificationMsg\ ident;\leavevmode\par
+{\hllin 206\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 207\ }}{\hlstd\ \ \ }{\hlstd //\ KML\ stuff\leavevmode\par
+{\hllin 208\ }}{\hlstd\ \ \ }{\hlstd Avro2Kml\ a2k\ $\mathord{=}$\ new\ Avro2Kml();\leavevmode\par
+{\hllin 209\ }}{\hlstd\ \ \ }{\hlstd OskyKml\ kml\ $\mathord{=}$\ a2k.new\ OskyKml();\leavevmode\par
+{\hllin 210\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 211\ }}{\hlstd\ \ \ }{\hlstd mainloop:\leavevmode\par
+{\hllin 212\ }}{\hlstd\ \ \ }{\hlstd while\ (fileReader.hasNext())\ $\{$\leavevmode\par
+{\hllin 213\ }}{\hlstd\ \ \ \ }{\hlstd msgCount$\mathord{+}$$\mathord{+}$;\leavevmode\par
+{\hllin 214\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 215\ }}{\hlstd\ \ \ \ }{\hlstd //\ get\ next\ record\ from\ file\leavevmode\par
+{\hllin 216\ }}{\hlstd\ \ \ \ }{\hlstd record\ $\mathord{=}$\ fileReader.next(record);\leavevmode\par
+{\hllin 217\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 218\ }}{\hlstd\ \ \ \ }{\hlstd //\ time\ filters\leavevmode\par
+{\hllin 219\ }}{\hlstd\ \ \ \ }{\hlstd if\ (filter\_{}start\ !$\mathord{=}$\ null\ \&{}\&{}\ record.getTimeAtServer()$\mathord{<}$filter\_{}start)\leavevmode\par
+{\hllin 220\ }}{\hlstd\ \ \ \ \ }{\hlstd continue;\leavevmode\par
+{\hllin 221\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 222\ }}{\hlstd\ \ \ \ }{\hlstd if\ (filter\_{}end\ !$\mathord{=}$\ null\ \&{}\&{}\ record.getTimeAtServer()$\mathord{>}$filter\_{}end)\leavevmode\par
+{\hllin 223\ }}{\hlstd\ \ \ \ \ }{\hlstd continue;\leavevmode\par
+{\hllin 224\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 225\ }}{\hlstd\ \ \ \ }{\hlstd //\ cleanup\ decoders\ every\ 1.000.000\ messages\ to\ avoid\ excessive\ memory\ usage\leavevmode\par
+{\hllin 226\ }}{\hlstd\ \ \ \ }{\hlstd //\ therefore,\ remove\ decoders\ which\ have\ not\ been\ used\ for\ more\ than\ one\ hour.\leavevmode\par
+{\hllin 227\ }}{\hlstd\ \ \ \ }{\hlstd if\ (msgCount\ \%{}\ 1000000\ $\mathord{=}$$\mathord{=}$\ 0)\ $\{$\leavevmode\par
+{\hllin 228\ }}{\hlstd\ \ \ \ \ }{\hlstd List$\mathord{<}$String$\mathord{>}$\ to\_{}remove\ $\mathord{=}$\ new\ ArrayList$\mathord{<}$String$\mathord{>}$();\leavevmode\par
+{\hllin 229\ }}{\hlstd\ \ \ \ \ }{\hlstd for\ (String\ key\ :\ flights.keySet())\ $\{$\leavevmode\par
+{\hllin 230\ }}{\hlstd\ \ \ \ \ \ }{\hlstd if\ (flights.get(key).last$\mathord{<}$record.getTimeAtServer()$\mathord{-}$3600)\ $\{$\leavevmode\par
+{\hllin 231\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd to\_{}remove.add(key);\leavevmode\par
+{\hllin 232\ }}{\hlstd\ \ \ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 233\ }}{\hlstd\ \ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 234\ }\leavevmode\par
+{\hllin 235\ }}{\hlstd\ \ \ \ \ }{\hlstd for\ (String\ key\ :\ to\_{}remove)\ $\{$\leavevmode\par
+{\hllin 236\ }}{\hlstd\ \ \ \ \ \ }{\hlstd //\ number\ of\ flights\ filter\leavevmode\par
+{\hllin 237\ }}{\hlstd\ \ \ \ \ \ }{\hlstd if\ (filter\_{}max\ !$\mathord{=}$\ null\ \&{}\&{}\ kml.getNumberOfFlights()$\mathord{>}$$\mathord{=}$filter\_{}max)\leavevmode\par
+{\hllin 238\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd break\ mainloop;\leavevmode\par
+{\hllin 239\ }\leavevmode\par
+{\hllin 240\ }}{\hlstd\ \ \ \ \ \ }{\hlstd if\ (option\_{}nopos\ |\ flights.get(key).coords.size()\ $\mathord{>}$\ 0)\leavevmode\par
+{\hllin 241\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd kml.addFlight(flights.get(key));\leavevmode\par
+{\hllin 242\ }}{\hlstd\ \ \ \ \ \ }{\hlstd flights.remove(key);\leavevmode\par
+{\hllin 243\ }}{\hlstd\ \ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 244\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 245\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 246\ }}{\hlstd\ \ \ \ }{\hlstd try\ $\{$\leavevmode\par
+{\hllin 247\ }}{\hlstd\ \ \ \ \ }{\hlstd msg\ $\mathord{=}$\ Decoder.genericDecoder(record.getRawMessage().toString());\leavevmode\par
+{\hllin 248\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\ catch\ (BadFormatException\ e)\ $\{$\leavevmode\par
+{\hllin 249\ }}{\hlstd\ \ \ \ \ }{\hlstd continue;\leavevmode\par
+{\hllin 250\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 251\ }\leavevmode\par
+{\hllin 252\ }}{\hlstd\ \ \ \ }{\hlstd icao24\ $\mathord{=}$\ tools.toHexString(msg.getIcao24());\leavevmode\par
+{\hllin 253\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 254\ }}{\hlstd\ \ \ \ }{\hlstd //\ icao24\ filter\leavevmode\par
+{\hllin 255\ }}{\hlstd\ \ \ \ }{\hlstd if\ (filter\_{}icao24\ !$\mathord{=}$\ null\ \&{}\&{}\ !icao24.equals(filter\_{}icao24))\leavevmode\par
+{\hllin 256\ }}{\hlstd\ \ \ \ \ }{\hlstd continue;\leavevmode\par
+{\hllin 257\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 258\ }}{\hlstd\ \ \ \ }{\hlstd //\ select\ current\ flight\leavevmode\par
+{\hllin 259\ }}{\hlstd\ \ \ \ }{\hlstd if\ (flights.containsKey(icao24))\leavevmode\par
+{\hllin 260\ }}{\hlstd\ \ \ \ \ }{\hlstd flight\ $\mathord{=}$\ flights.get(icao24);\leavevmode\par
+{\hllin 261\ }}{\hlstd\ \ \ \ }{\hlstd else\ $\{$\leavevmode\par
+{\hllin 262\ }}{\hlstd\ \ \ \ \ }{\hlstd flight\ $\mathord{=}$\ a2k.new\ Flight();\leavevmode\par
+{\hllin 263\ }}{\hlstd\ \ \ \ \ }{\hlstd flight.icao24\ $\mathord{=}$\ icao24;\leavevmode\par
+{\hllin 264\ }}{\hlstd\ \ \ \ \ }{\hlstd flight.first\ $\mathord{=}$\ record.getTimeAtServer();\leavevmode\par
+{\hllin 265\ }}{\hlstd\ \ \ \ \ }{\hlstd flights.put(icao24,\ flight);\leavevmode\par
+{\hllin 266\ }}{\hlstd\ \ \ \ \ }{\hlstd $\mathord{+}$$\mathord{+}$flights\_{}cnt;\leavevmode\par
+{\hllin 267\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 268\ }\leavevmode\par
+{\hllin 269\ }}{\hlstd\ \ \ \ }{\hlstd flight.last\ $\mathord{=}$\ record.getTimeAtServer();\leavevmode\par
+{\hllin 270\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 271\ }}{\hlstd\ \ \ \ }{\hlstd if\ (!flight.serials.contains(record.getSensorSerialNumber()))\leavevmode\par
+{\hllin 272\ }}{\hlstd\ \ \ \ \ }{\hlstd flight.serials.add(record.getSensorSerialNumber());\leavevmode\par
+{\hllin 273\ }\leavevmode\par
+{\hllin 274\ }}{\hlstd\ \ \ \ }{\hlstd /////////\ Airborne\ Position\ Messages\leavevmode\par
+{\hllin 275\ }}{\hlstd\ \ \ \ }{\hlstd if\ (msg.getType()\ $\mathord{=}$$\mathord{=}$\ ModeSReply.subtype.ADSB\_{}AIRBORN\_{}POSITION)\ $\{$\leavevmode\par
+{\hllin 276\ }}{\hlstd\ \ \ \ \ }{\hlstd airpos\ $\mathord{=}$\ (AirbornePositionMsg)\ msg;\leavevmode\par
+{\hllin 277\ }}{\hlstd\ \ \ \ \ }{\hlstd Position\ rec\ $\mathord{=}$\ record.getSensorLatitude()\ !$\mathord{=}$\ null\ ?\leavevmode\par
+{\hllin 278\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd new\ Position(\leavevmode\par
+{\hllin 279\ }}{\hlstd\ \ \ \ \ \ \ \ \ }{\hlstd record.getSensorLongitude(),\leavevmode\par
+{\hllin 280\ }}{\hlstd\ \ \ \ \ \ \ \ \ }{\hlstd record.getSensorLatitude(),\leavevmode\par
+{\hllin 281\ }}{\hlstd\ \ \ \ \ \ \ \ \ }{\hlstd record.getSensorAltitude())\ :\ null;\leavevmode\par
+{\hllin 282\ }}{\hlstd\ \ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 283\ }}{\hlstd\ \ \ \ \ }{\hlstd airpos.setNICSupplementA(flight.dec.getNICSupplementA());\leavevmode\par
+{\hllin 284\ }}{\hlstd\ \ \ \ \ }{\hlstd Position\ pos\ $\mathord{=}$\ flight.dec.decodePosition(record.getTimeAtServer(),\ rec,\ airpos);\leavevmode\par
+{\hllin 285\ }}{\hlstd\ \ \ \ \ }{\hlstd if\ (pos\ $\mathord{=}$$\mathord{=}$\ null)\leavevmode\par
+{\hllin 286\ }}{\hlstd\ \ \ \ \ \ }{\hlstd $\mathord{+}$$\mathord{+}$err\_{}pos\_{}cnt;\leavevmode\par
+{\hllin 287\ }}{\hlstd\ \ \ \ \ }{\hlstd else\ $\{$\leavevmode\par
+{\hllin 288\ }}{\hlstd\ \ \ \ \ \ }{\hlstd if\ (pos.isReasonable())\ $\{$\leavevmode\par
+{\hllin 289\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd Coordinate\ coord\ $\mathord{=}$\ new\ Coordinate(pos.getLongitude(),\ pos.getLatitude(),\leavevmode\par
+{\hllin 290\ }}{\hlstd\ \ \ \ \ \ \ \ \ }{\hlstd //\ set\ altitude\ to\ 0\ if\ negative...\ looks\ nicer\ in\ google\ earth\leavevmode\par
+{\hllin 291\ }}{\hlstd\ \ \ \ \ \ \ \ \ }{\hlstd pos.getAltitude()\ !$\mathord{=}$\ null\ \&{}\&{}\ pos.getAltitude()$\mathord{>}$0\ ?\ pos.getAltitude()\ :\ 0);\leavevmode\par
+{\hllin 292\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd if\ (!flight.coords.contains(coord))\ $\{$\ //\ remove\ duplicates\ to\ safe\ memory\leavevmode\par
+{\hllin 293\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd flight.coords.add(coord);\leavevmode\par
+{\hllin 294\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd $\mathord{+}$$\mathord{+}$good\_{}pos\_{}cnt;\leavevmode\par
+{\hllin 295\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 296\ }}{\hlstd\ \ \ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 297\ }}{\hlstd\ \ \ \ \ \ }{\hlstd else\ $\{$\leavevmode\par
+{\hllin 298\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd flight.contains\_{}unreasonable\ $\mathord{=}$\ true;\leavevmode\par
+{\hllin 299\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd $\mathord{+}$$\mathord{+}$bad\_{}pos\_{}cnt;\leavevmode\par
+{\hllin 300\ }}{\hlstd\ \ \ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 301\ }}{\hlstd\ \ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 302\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 303\ }}{\hlstd\ \ \ \ }{\hlstd /////////\ Surface\ Position\ Messages\leavevmode\par
+{\hllin 304\ }}{\hlstd\ \ \ \ }{\hlstd else\ if\ (msg.getType()\ $\mathord{=}$$\mathord{=}$\ ModeSReply.subtype.ADSB\_{}SURFACE\_{}POSITION)\ $\{$\leavevmode\par
+{\hllin 305\ }}{\hlstd\ \ \ \ \ }{\hlstd surfacepos\ $\mathord{=}$\ (SurfacePositionMsg)\ msg;\leavevmode\par
+{\hllin 306\ }}{\hlstd\ \ \ \ \ }{\hlstd Position\ rec\ $\mathord{=}$\ record.getSensorLatitude()\ !$\mathord{=}$\ null\ ?\leavevmode\par
+{\hllin 307\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd new\ Position(\leavevmode\par
+{\hllin 308\ }}{\hlstd\ \ \ \ \ \ \ \ \ }{\hlstd record.getSensorLongitude(),\leavevmode\par
+{\hllin 309\ }}{\hlstd\ \ \ \ \ \ \ \ \ }{\hlstd record.getSensorLatitude(),\leavevmode\par
+{\hllin 310\ }}{\hlstd\ \ \ \ \ \ \ \ \ }{\hlstd record.getSensorAltitude())\ :\ null;\leavevmode\par
+{\hllin 311\ }}{\hlstd\ \ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 312\ }}{\hlstd\ \ \ \ \ }{\hlstd Position\ pos\ $\mathord{=}$\ flight.dec.decodePosition(record.getTimeAtServer(),\ rec,\ surfacepos);\leavevmode\par
+{\hllin 313\ }}{\hlstd\ \ \ \ \ }{\hlstd if\ (pos\ $\mathord{=}$$\mathord{=}$\ null)\leavevmode\par
+{\hllin 314\ }}{\hlstd\ \ \ \ \ \ }{\hlstd $\mathord{+}$$\mathord{+}$err\_{}pos\_{}cnt;\leavevmode\par
+{\hllin 315\ }}{\hlstd\ \ \ \ \ }{\hlstd else\ $\{$\leavevmode\par
+{\hllin 316\ }}{\hlstd\ \ \ \ \ \ }{\hlstd if\ (pos.isReasonable())\ $\{$\leavevmode\par
+{\hllin 317\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd Coordinate\ coord\ $\mathord{=}$\ new\ Coordinate(pos.getLongitude(),\ pos.getLatitude(),\ 0);\leavevmode\par
+{\hllin 318\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 319\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd if\ (!flight.coords.contains(coord))\ $\{$\ //\ remove\ duplicates\ to\ safe\ memory\leavevmode\par
+{\hllin 320\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd flight.coords.add(coord);\leavevmode\par
+{\hllin 321\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd $\mathord{+}$$\mathord{+}$good\_{}pos\_{}cnt;\leavevmode\par
+{\hllin 322\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 323\ }}{\hlstd\ \ \ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 324\ }}{\hlstd\ \ \ \ \ \ }{\hlstd else\ $\{$\leavevmode\par
+{\hllin 325\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd flight.contains\_{}unreasonable\ $\mathord{=}$\ true;\leavevmode\par
+{\hllin 326\ }}{\hlstd\ \ \ \ \ \ \ }{\hlstd $\mathord{+}$$\mathord{+}$bad\_{}pos\_{}cnt;\leavevmode\par
+{\hllin 327\ }}{\hlstd\ \ \ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 328\ }}{\hlstd\ \ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 329\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 330\ }}{\hlstd\ \ \ \ }{\hlstd /////////\ Identification\ Messages\leavevmode\par
+{\hllin 331\ }}{\hlstd\ \ \ \ }{\hlstd else\ if\ (msg.getType()\ $\mathord{=}$$\mathord{=}$\ ModeSReply.subtype.ADSB\_{}IDENTIFICATION)\ $\{$\leavevmode\par
+{\hllin 332\ }}{\hlstd\ \ \ \ \ }{\hlstd ident\ $\mathord{=}$\ (IdentificationMsg)\ msg;\leavevmode\par
+{\hllin 333\ }}{\hlstd\ \ \ \ \ }{\hlstd flight.callsign\ $\mathord{=}$\ ident.getIdentity();\leavevmode\par
+{\hllin 334\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 335\ }}{\hlstd\ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 336\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 337\ }}{\hlstd\ \ \ }{\hlstd //\ write\ residual\ flights\ to\ KML\leavevmode\par
+{\hllin 338\ }}{\hlstd\ \ \ }{\hlstd for\ (String\ key\ :\ flights.keySet())\ $\{$\leavevmode\par
+{\hllin 339\ }}{\hlstd\ \ \ \ }{\hlstd //\ number\ of\ flights\ filter\leavevmode\par
+{\hllin 340\ }}{\hlstd\ \ \ \ }{\hlstd if\ (filter\_{}max\ !$\mathord{=}$\ null\ \&{}\&{}\ kml.getNumberOfFlights()$\mathord{>}$$\mathord{=}$filter\_{}max)\leavevmode\par
+{\hllin 341\ }}{\hlstd\ \ \ \ \ }{\hlstd break;\leavevmode\par
+{\hllin 342\ }}{\hlstd\ \ \ \ }{\hlstd if\ (option\_{}nopos\ |\ flights.get(key).coords.size()\ $\mathord{>}$\ 0)\leavevmode\par
+{\hllin 343\ }}{\hlstd\ \ \ \ \ }{\hlstd kml.addFlight(flights.get(key));\leavevmode\par
+{\hllin 344\ }}{\hlstd\ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 345\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 346\ }}{\hlstd\ \ \ }{\hlstd fileReader.close();\leavevmode\par
+{\hllin 347\ }}{\hlstd\ \ \ }{\hlstd kml.writeToFile(kmlfile);\leavevmode\par
+{\hllin 348\ }}{\hlstd\ \ \ }{\hlstd \leavevmode\par
+{\hllin 349\ }}{\hlstd\ \ }{\hlstd $\}$\ catch\ (IOException\ e)\ $\{$\leavevmode\par
+{\hllin 350\ }}{\hlstd\ \ \ }{\hlstd //\ error\ while\ trying\ to\ read\ file\leavevmode\par
+{\hllin 351\ }}{\hlstd\ \ \ }{\hlstd System.err.println("IO\ Error:\ "$\mathord{+}$e.getMessage());\leavevmode\par
+{\hllin 352\ }}{\hlstd\ \ \ }{\hlstd System.exit(1);\leavevmode\par
+{\hllin 353\ }}{\hlstd\ \ }{\hlstd $\}$\ catch\ (Exception\ e)\ $\{$\leavevmode\par
+{\hllin 354\ }}{\hlstd\ \ \ }{\hlstd //\ something\ went\ wrong\leavevmode\par
+{\hllin 355\ }}{\hlstd\ \ \ }{\hlstd System.err.println("Something\ went\ wrong:\ "$\mathord{+}$e.getMessage());\leavevmode\par
+{\hllin 356\ }}{\hlstd\ \ \ }{\hlstd e.printStackTrace();\leavevmode\par
+{\hllin 357\ }}{\hlstd\ \ \ }{\hlstd System.exit(1);\leavevmode\par
+{\hllin 358\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 359\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 360\ }}{\hlstd\ \ }{\hlstd System.err.println("Read\ "$\mathord{+}$msgCount$\mathord{+}$"\ messages.");\leavevmode\par
+{\hllin 361\ }}{\hlstd\ \ }{\hlstd System.err.println("Good\ positions:\ "$\mathord{+}$good\_{}pos\_{}cnt);\leavevmode\par
+{\hllin 362\ }}{\hlstd\ \ }{\hlstd System.err.println("Bad\ positions:\ "$\mathord{+}$bad\_{}pos\_{}cnt);\leavevmode\par
+{\hllin 363\ }}{\hlstd\ \ }{\hlstd System.err.println("Erroneous\ positions:\ "$\mathord{+}$err\_{}pos\_{}cnt);\leavevmode\par
+{\hllin 364\ }}{\hlstd\ \ }{\hlstd System.err.println("Flights:\ "$\mathord{+}$flights\_{}cnt);\leavevmode\par
+{\hllin 365\ }\ $\}$\leavevmode\par
+{\hllin 366\ }$\}$}\leavevmode\par
+}

@@ -1,0 +1,32 @@
+{
+\tt
+{\hlstd {\hllin 01\ }public\ Position\ getLocalPosition(Position\ ref)\ throws\ MissingInformationException\ $\{$\leavevmode\par
+{\hllin 02\ }\ if\ (!horizontal\_{}position\_{}available)\leavevmode\par
+{\hllin 03\ }}{\hlstd\ \ }{\hlstd throw\ new\ MissingInformationException("No\ position\ information\ available!");\leavevmode\par
+{\hllin 04\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 05\ }\ //\ latitude\ zone\ size\leavevmode\par
+{\hllin 06\ }\ double\ Dlat\ $\mathord{=}$\ isOddFormat()\ ?\ 90.0/59.0\ :\ 90.0/60.0;\leavevmode\par
+{\hllin 07\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 08\ }\ //\ latitude\ zone\ index\leavevmode\par
+{\hllin 09\ }\ double\ j\ $\mathord{=}$\ Math.floor(ref.getLatitude()/Dlat)\ $\mathord{+}$\ Math.floor(0.5$\mathord{+}$(mod(ref.getLatitude(),\ Dlat))/Dlat$\mathord{-}$getCPREncodedLatitude()/((double)(1$\mathord{<}$$\mathord{<}$17)));\leavevmode\par
+{\hllin 10\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 11\ }\ //\ decoded\ position\ latitude\leavevmode\par
+{\hllin 12\ }\ double\ Rlat\ $\mathord{=}$\ Dlat*(j$\mathord{+}$getCPREncodedLatitude()/((double)(1$\mathord{<}$$\mathord{<}$17)));\leavevmode\par
+{\hllin 13\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 14\ }\ //\ longitude\ zone\ size\leavevmode\par
+{\hllin 15\ }\ double\ Dlon\ $\mathord{=}$\ 90.0/Math.max(1.0,\ NL(Rlat)$\mathord{-}$(isOddFormat()?1.0:0.0));\leavevmode\par
+{\hllin 16\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 17\ }\ //\ longitude\ zone\ coordinate\leavevmode\par
+{\hllin 18\ }\ double\ m\ $\mathord{=}$\leavevmode\par
+{\hllin 19\ }}{\hlstd\ \ \ }{\hlstd Math.floor(ref.getLongitude()/Dlon)\ $\mathord{+}$\leavevmode\par
+{\hllin 20\ }}{\hlstd\ \ \ }{\hlstd Math.floor(0.5$\mathord{+}$(mod(ref.getLongitude(),Dlon))/Dlon$\mathord{-}$(float)getCPREncodedLongitude()/((double)(1$\mathord{<}$$\mathord{<}$17)));\leavevmode\par
+{\hllin 21\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 22\ }\ //\ and\ finally\ the\ longitude\leavevmode\par
+{\hllin 23\ }\ double\ Rlon\ $\mathord{=}$\ Dlon\ *\ (m\ $\mathord{+}$\ getCPREncodedLongitude()/((double)(1$\mathord{<}$$\mathord{<}$17)));\leavevmode\par
+{\hllin 24\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 25\ }//}{\hlstd\ \ }{\hlstd System.out.println("Loc:\ EncLon:\ "$\mathord{+}$getCPREncodedLongitude()$\mathord{+}$\leavevmode\par
+{\hllin 26\ }//}{\hlstd\ \ \ \ }{\hlstd "\ m:\ "$\mathord{+}$m$\mathord{+}$"\ Dlon:\ "$\mathord{+}$Dlon$\mathord{+}$\ "\ Rlon2:\ "$\mathord{+}$Rlon2);\leavevmode\par
+{\hllin 27\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 28\ }\ return\ new\ Position(Rlon,\ Rlat,\ 0.0);\leavevmode\par
+{\hllin 29\ }$\}$}\leavevmode\par
+}

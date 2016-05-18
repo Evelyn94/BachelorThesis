@@ -1,0 +1,70 @@
+{
+\tt
+{\hlstd {\hllin 01\ }public\ class\ Decoder\ $\{$\leavevmode\par
+{\hllin 02\ }\leavevmode\par
+{\hllin 03\ }\ public\ static\ ModeSReply\ genericDecoder\ (String\ raw\_{}message)\ throws\ BadFormatException,\ UnspecifiedFormatError\ $\{$\leavevmode\par
+{\hllin 04\ }}{\hlstd\ \ }{\hlstd ModeSReply\ modes\ $\mathord{=}$\ new\ ModeSReply(raw\_{}message);\leavevmode\par
+{\hllin 05\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 06\ }}{\hlstd\ \ }{\hlstd if\ (modes.getDownlinkFormat()\ $\mathord{=}$$\mathord{=}$\ 4)\ $\{$\leavevmode\par
+{\hllin 07\ }}{\hlstd\ \ \ }{\hlstd return\ new\ AltitudeReply(modes);\leavevmode\par
+{\hllin 08\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 09\ }}{\hlstd\ \ }{\hlstd else\ if\ (modes.getDownlinkFormat()\ $\mathord{=}$$\mathord{=}$\ 5)\ $\{$\leavevmode\par
+{\hllin 10\ }}{\hlstd\ \ \ }{\hlstd return\ new\ IdentifyReply(modes);\leavevmode\par
+{\hllin 11\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 12\ }}{\hlstd\ \ }{\hlstd else\ if\ (modes.getDownlinkFormat()\ $\mathord{=}$$\mathord{=}$\ 11)\ $\{$\leavevmode\par
+{\hllin 13\ }}{\hlstd\ \ \ }{\hlstd return\ new\ AllCallReply(modes);\leavevmode\par
+{\hllin 14\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 15\ }}{\hlstd\ \ }{\hlstd else\ if\ (modes.getDownlinkFormat()\ $\mathord{=}$$\mathord{=}$\ 17\ ||\ modes.getDownlinkFormat()\ $\mathord{=}$$\mathord{=}$\ 18)\ $\{$\leavevmode\par
+{\hllin 16\ }}{\hlstd\ \ \ }{\hlstd ExtendedSquitter\ es1090\ $\mathord{=}$\ new\ ExtendedSquitter(modes);\leavevmode\par
+{\hllin 17\ }\leavevmode\par
+{\hllin 18\ }}{\hlstd\ \ \ }{\hlstd //\ what\ kind\ of\ extended\ squitter?\leavevmode\par
+{\hllin 19\ }}{\hlstd\ \ \ }{\hlstd byte\ ftc\ $\mathord{=}$\ es1090.getFormatTypeCode();\leavevmode\par
+{\hllin 20\ }\leavevmode\par
+{\hllin 21\ }}{\hlstd\ \ \ }{\hlstd if\ (ftc\ $\mathord{>}$$\mathord{=}$\ 1\ \&{}\&{}\ ftc\ $\mathord{<}$$\mathord{=}$\ 4)\ //\ identification\ message\leavevmode\par
+{\hllin 22\ }}{\hlstd\ \ \ \ }{\hlstd return\ new\ IdentificationMsg(es1090);\leavevmode\par
+{\hllin 23\ }\leavevmode\par
+{\hllin 24\ }}{\hlstd\ \ \ }{\hlstd if\ (ftc\ $\mathord{>}$$\mathord{=}$\ 5\ \&{}\&{}\ ftc\ $\mathord{<}$$\mathord{=}$\ 8)\ //\ surface\ position\ message\leavevmode\par
+{\hllin 25\ }}{\hlstd\ \ \ \ }{\hlstd return\ new\ SurfacePositionMsg(es1090);\leavevmode\par
+{\hllin 26\ }\leavevmode\par
+{\hllin 27\ }}{\hlstd\ \ \ }{\hlstd if\ ((ftc\ $\mathord{>}$$\mathord{=}$\ 9\ \&{}\&{}\ ftc\ $\mathord{<}$$\mathord{=}$\ 18)\ ||\ (ftc\ $\mathord{>}$$\mathord{=}$\ 20\ \&{}\&{}\ ftc\ $\mathord{<}$$\mathord{=}$\ 22))\ //\ airborne\ position\ message\leavevmode\par
+{\hllin 28\ }}{\hlstd\ \ \ \ }{\hlstd return\ new\ AirbornePositionMsg(es1090);\leavevmode\par
+{\hllin 29\ }\leavevmode\par
+{\hllin 30\ }}{\hlstd\ \ \ }{\hlstd if\ (ftc\ $\mathord{=}$$\mathord{=}$\ 19)\ $\{$\ //\ possible\ velocity\ message,\ check\ subtype\leavevmode\par
+{\hllin 31\ }}{\hlstd\ \ \ \ }{\hlstd int\ subtype\ $\mathord{=}$\ es1090.getMessage()[0]\&{}0x7;\leavevmode\par
+{\hllin 32\ }\leavevmode\par
+{\hllin 33\ }}{\hlstd\ \ \ \ }{\hlstd if\ (subtype\ $\mathord{=}$$\mathord{=}$\ 1\ ||\ subtype\ $\mathord{=}$$\mathord{=}$\ 2)\ //\ velocity\ over\ ground\leavevmode\par
+{\hllin 34\ }}{\hlstd\ \ \ \ \ }{\hlstd return\ new\ VelocityOverGroundMsg(es1090);\leavevmode\par
+{\hllin 35\ }}{\hlstd\ \ \ \ }{\hlstd else\ if\ (subtype\ $\mathord{=}$$\mathord{=}$\ 3\ ||\ subtype\ $\mathord{=}$$\mathord{=}$\ 4)\ //\ airspeed\ \&{}\ heading\leavevmode\par
+{\hllin 36\ }}{\hlstd\ \ \ \ \ }{\hlstd return\ new\ AirspeedHeadingMsg(es1090);\leavevmode\par
+{\hllin 37\ }}{\hlstd\ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 38\ }\leavevmode\par
+{\hllin 39\ }}{\hlstd\ \ \ }{\hlstd if\ (ftc\ $\mathord{=}$$\mathord{=}$\ 28)\ $\{$\ //\ aircraft\ status\ message,\ check\ subtype\leavevmode\par
+{\hllin 40\ }}{\hlstd\ \ \ \ }{\hlstd int\ subtype\ $\mathord{=}$\ es1090.getMessage()[0]\&{}0x7;\leavevmode\par
+{\hllin 41\ }\leavevmode\par
+{\hllin 42\ }}{\hlstd\ \ \ \ }{\hlstd if\ (subtype\ $\mathord{=}$$\mathord{=}$\ 1)\ //\ emergency/priority\ status\leavevmode\par
+{\hllin 43\ }}{\hlstd\ \ \ \ \ }{\hlstd return\ new\ EmergencyOrPriorityStatusMsg(es1090);\leavevmode\par
+{\hllin 44\ }}{\hlstd\ \ \ \ }{\hlstd if\ (subtype\ $\mathord{=}$$\mathord{=}$\ 2)\ //\ TCAS\ resolution\ advisory\ report\leavevmode\par
+{\hllin 45\ }}{\hlstd\ \ \ \ \ }{\hlstd return\ new\ TCASResolutionAdvisoryMsg(es1090);\leavevmode\par
+{\hllin 46\ }}{\hlstd\ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 47\ }\leavevmode\par
+{\hllin 48\ }}{\hlstd\ \ \ }{\hlstd if\ (ftc\ $\mathord{=}$$\mathord{=}$\ 31)\ $\{$\ //\ operational\ status\ message\leavevmode\par
+{\hllin 49\ }}{\hlstd\ \ \ \ }{\hlstd int\ subtype\ $\mathord{=}$\ es1090.getMessage()[0]\&{}0x7;\leavevmode\par
+{\hllin 50\ }\leavevmode\par
+{\hllin 51\ }}{\hlstd\ \ \ \ }{\hlstd if\ (subtype\ $\mathord{=}$$\mathord{=}$\ 0\ ||\ subtype\ $\mathord{=}$$\mathord{=}$\ 1)\ //\ airborne\ or\ surface?\leavevmode\par
+{\hllin 52\ }}{\hlstd\ \ \ \ \ }{\hlstd return\ new\ OperationalStatusMsg(es1090);\leavevmode\par
+{\hllin 53\ }}{\hlstd\ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 54\ }\leavevmode\par
+{\hllin 55\ }}{\hlstd\ \ \ }{\hlstd return\ es1090;\ //\ unknown\ extended\ squitter\leavevmode\par
+{\hllin 56\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 57\ }}{\hlstd\ \ }{\hlstd else\ if\ (modes.getDownlinkFormat()\ $\mathord{=}$$\mathord{=}$\ 20)\ $\{$\leavevmode\par
+{\hllin 58\ }}{\hlstd\ \ \ }{\hlstd return\ new\ CommBAltitudeReply(modes);\leavevmode\par
+{\hllin 59\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 60\ }}{\hlstd\ \ }{\hlstd else\ if\ (modes.getDownlinkFormat()\ $\mathord{=}$$\mathord{=}$\ 21)\ $\{$\leavevmode\par
+{\hllin 61\ }}{\hlstd\ \ \ }{\hlstd return\ new\ CommBIdentifyReply(modes);\leavevmode\par
+{\hllin 62\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 63\ }\leavevmode\par
+{\hllin 64\ }}{\hlstd\ \ }{\hlstd return\ modes;\ //\ unknown\ mode\ s\ reply\leavevmode\par
+{\hllin 65\ }\ $\}$\leavevmode\par
+{\hllin 66\ }\leavevmode\par
+{\hllin 67\ }$\}$}\leavevmode\par
+}

@@ -1,0 +1,58 @@
+% !Mode:: "TeX:UTF-8"
+
+\chapter{A parameter collection for enciphering strings of arbitrary radix and length}
+\section{Introduction}
+\subsection{背景}
+一种对于格式保护加密(FPE)的方案理应做到传统块加密能做到的，比如加密具有空格的消息空间而不加密空格，不只是像$\chi=\{0,1\}^{128}$这样的消息空间，而是更加普遍[1,3]。举个例子，消息空间可能是集合$\chi=\{0,1,...,9\}^{16}$，在这种情况下每加密一条16-digit的明文X$\in \chi$则得到一条16-digit的密文Y$\in \chi$。在一个以字符串为基础的FPE方案里，我们考虑的唯一一种对于一些消息长度n和字母表大小radixde FPE类型的消息空间是$\chi = \{0,1,...,radix-1\}^n$这样的形式。
+实现FPE的一种方式使使用以Feistel为基础的操作模型。作为基础的轮功能可以是基于传统的块加密算法，比如AES。两个关于这个问题的提议目前已经提交给NIST了。其中一种就是FFX，由这篇文章的作者提供[2].另一种是BPS，由Brier, Peyrin, 和 Stern [4]独立完成并在FFX不久之后提交。
+
+FFX方案相对于BPS方案更加的开放。就它本身而言，它是一种框架而不是一种模式。如果要把FFX变成一种具体的模式的话需要为其填充一系列的参数，它一共有9个参数。为了让它看起来更加具体，FFX的作者建议要填充两个参数，叫做A2和A10。方案FFX-A2加密8–128 bits二进制比特串，而FFX-A10加密4–36 digits的十进制字符串。对于高效率的长字符串，两种方案都采用的是12轮的Feistel。但是轮数会随着消息长度的缩短而快速增长，对于所允许的最短消息长度，FFX-A10的轮数最高能到到24轮，FFX-A2最高能达到36轮。
+
+BPS带来了两种用户可能会喜欢的心特性。第一个是更加有挑战性的轮数：确定使用8轮，与用户的输入长度无关。更小的轮数意味着更快的速度（当然，也意味着更不保守的设计）。第二个是BPS包括一个像CBC一样的链状模式，因此可以加密非常长的字符串。
+
+我们需要注意的是像BPS这种CBC模式的加密算法，或者更一般性的说，任何像CBC一样的模式都可能无法达到FPE规定中所要求的安全性需求[1,3]:我们将无法得到一个伪随机置换(PRP)。首先，密文的第一个比特不依赖于明文的最后一个比特。我们认为任何一种自称为格式保护加密的方案都应该达到(PRP)的目标，当然强PRP目标更好。
+
+\subsection{FFX[radix]的模式}
+这篇文章提供了新的FFX参数集合。首先，我们拓展了允许的radix值；现在任何合理的radix值都可以被使用，不仅仅是2或者10.第二，我们也拓展了允许的消息长度，允许更有效的任意长度字符串进行加密。最后，相对于FFX-A2 和 FFX-A10我们选择了更有挑战性的轮数。
+为了完成上面提到的拓展，我们把FFX方案定义为FFX[radix]。括号里的值可以被称为FFX参数。radix的取值范围介于2 到 $2^{16}$之间。要在FFX[radix]下进行加密的消息被视为从字母表Chars = $\{0,1,2,...,radix-1\}$中取出的字符串。FFX[radix]方案使用基于AES的平衡Feistel网络结构来完成它的工作。如果消息长度是奇数，则使用一种交替的，最大平衡的Feistel方案。
+
+FFX[radix]模式有效的统一和拓展了FFX-A2 和 FFX-A10；因此我们建议用它代替之前提出的模式。radix的取值变得更普通化，消息长度可以变得更长，还有轮数可以变成常量，而不是像之前一样需要依赖于消息的长度决定。我们并没有尝试去维持向上兼容性；FFX[2]和 FFX[10]与FFX-A2 和 FFX-A10不一致，即使给它们赋予相同的轮数它们也不会一致(尽管这样加密上的区别不大)。
+
+
+\section{The Scheme FFX[radix]}
+
+我们假设符号注释来自FFX spec[2],但是为了读者的方便，我们在这里回忆一下相关性最高的定义。明文和密文被看成从字母表Chars = $\{0,1,...,radix-1\}$中取出的字符串。我们定义$|X|$为字符串X的长度，即字符串X里的字符个数。让Byte由$\{0,1\}^8$，这种8-bit字节(8位元组)来表示。通过$|T|_8$，我们把字符串T $\in$ Byte*的长度定义为用字节计算的长度。基于对radix含义的理解，块相加功能$\boxplus$被定义为$a_1\cdots a_n \boxplus b_1\cdots b_n = c_1\cdots c_n$ 当 $c_1 \cdots c_n$是满足$\sum c_i radix^{(n-i)} = (\sum a_i radix^{(n-i)} + \sum b_i radix^{(n-i)})$ mod $radix^n$要求的唯一字符串。通过X $\boxminus$ Y我们认为存在唯一的字符串Z，使Y $\boxplus$ Z = X。我们认为$[s]^i$是由$s\in [0\cdots2^{8i}-1]$编码的长度为i-byte的字符串。功能$NUM_{radix}$(X)需要一个非空字符串$X \in \{0,...,radix-1\}^*$把它转换为相应的数字，这些数字要在给定的radix的解释里，最重要的字节在前。功能$STR_{radix}^m (x)$需要从$x \in [0\cdots radix^m-1]$取出一个数字然后返回一个m字节的代表给定radix的字符串，最重要的字节在前。
+
+当$K \in \{0,1\}^{128}$ 和 $X \in \{0,1\}^*$以及$|X|$能被128整除，$CBC-MACK_K(X)$算法的定义如下。首先让 $X_1\cdots X_m \leftarrow X$ 当 $|X_i| = 128$ 和 让 $Y \leftarrow 0^{128}$. 然后, 对于 $j \leftarrow 1 \sim m$,置 $Y \leftarrow AES_K(Y \oplus X_i)$。最后，返回Y。
+
+
+\pic[htbp]{FFX[radix]的定义}{}{translationP1}
+
+由字符Chars = $\{0,1,..., radix-1\}$组成的加密字符串。它们用最大的平衡Feistel网络和一个基于AES CBC-MAC的轮函数。我们不重复FFX spec [2]里的更多材料，为了躲着的方便，我们提供了FFX自身的定义，特定是改变Feistel (method =2)。这使得我们的着重点简洁和独立。在图一我们强调FFX和参数集合[radix]。当FFX被这种参数集合实例化则包含FFX[radix]方案。在图2我们用图表解释了后面的模式
+
+\pic[htbp]{FFX[10]的解释}{}{translationP2}
+
+左边的描绘了奇数长度的输入行为(在这样的方案改动下，使用几乎平衡的Feistel);\newline 右边展示了一个偶数长度的输入(在这样的方案下，使用平衡的Feistel)。理论上的轮功能输出是虚构的；实际的值取决于密钥K和微调T，两个中的任一个都未被指定。
+
+
+\section{Comments}
+关于FFX的一个全面的讨论在说明书中给出，因此这篇文章只是一个附加物[2];我们在这里把自己限制为一个简短的评论。
+
+首先，我们需要强调的是，当我们被允许去加密非常方的字符串，FFX[radix]模式和真正的FFX通常是打算加密相对较短的字符串的。对于长度超过128 bits的二进制字符串，EME2 [5]或许是比FFX[radix]更好的选择。对于较长的非二进制字符串，一种模式可以，近似的，比FFX[radix]做得更好，不仅在速度上也在可证明安全性结果上。然而，没有人为这种模式写过一个说明，这是我们选择允许使FFX[radix]来加密即使相对来说较长的串的一个原因。
+
+第二，我们想要简短的讨论一下轮数，rnds(n) = 10。我们之前的工作，在A2和A10参数的手机上，已经使用了一个相对复杂的功能(我们把它称为$12^+$)在这方面上轮数是超过小轮数r的四倍，因此$r \cdot split(n) \cdot log_2(radix) \geq 128$;但是至少为12和总是6的倍数。规定是启发式的刺激和极端的保守。对于radix =10它当$n \geq 10$转化为rnds(n)=12；如果$6 \leq n \leq 9$，rnds(n)=18和如果n为4或者5，rnds(n)=24。我们获得的反馈以及我们自己的识别都是一个非固定的轮数当消息变短的时候。当为了使得对于这种选择的解释有意义(见FFX说明书[2]上的附件)，我们认为理论上的小号已经太高了。与此同时，没有任何真实的证据证明，一旦有人客服了“中间相遇”攻击，更短的字符串需要更多的轮数。我们早就注意到BPS [4]选择了一个为8的轮数，独立于消息长度。当把这些都纳入考虑范围，我们选出了简化和把轮数减少到10，加速了实现但是留下了一些安全的隐患。这个选择当然没有很保守因为轮数是$12^+$，但是最终这个机制的设计者一定要做出一个选择，这个决定基于他们对已有知识的判断和加密的艺术。
+
+第三，如同在FFX说明书[2]中讨论的一样，实施的选择将会很大程度的影响表现。比如，第一个AES计算暗示当要计算所有轮的时候第35行需要被执行。当radix不是2的幂，第38行的模需要着重的注意。
+
+最后我们再次强调FFX[radix]是FFX的一个实例化版本，以及其他实例化都服从于更高层次的方案。
+
+\section{References}
+[1] M. Bellare, T. Ristenpart, P. Rogaway, and T. Stegers. Format-preserving encryption. Selected Areas in Cryptography (SAC 2009), LNCS 5867, Springer, 2009. Also ePrint report 2009/251.
+
+[2] M. Bellare, P. Rogaway, and T. Spies. The FFX mode of operation for format-preserving encryption. Draft 1.1. February 20, 2010. Manuscript, available on the NIST website at URL http://csrc.nist.gov/groups/ST/toolkit/BCM/modes development.html.
+
+[3] J. Black and P. Rogaway. Ciphers with arbitrary finite domains. RSA Data Security Conference, Cryptographer’s Track (RSA CT ’02). LNCS vol. 2271, pp. 114–130, Springer, 2002.
+
+[4] E. Brier, T. Peyrin, and J. Stern. BPS: a format-preserving encryption proposal. Available at URL http://csrc.nist.gov/groups/ST/toolkit/BCM/modes development.html. Undated manuscript, published on the above website in April 2010.
+
+[5] IEEE P1619.2. Draft standard architecture for wide-block encryption for shared storage media. 2008. Available from https://siswg.net.

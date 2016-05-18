@@ -1,0 +1,61 @@
+{
+\tt
+{\hlstd {\hllin 01\ }def\ F(self,\ n,\ T,\ i,\ B):\leavevmode\par
+{\hllin 02\ }}{\hlstd\ \ \ \ }{\hlstd if\ T\ $\mathord{=}$$\mathord{=}$\ 0:\leavevmode\par
+{\hllin 03\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd t\ $\mathord{=}$\ 0\leavevmode\par
+{\hllin 04\ }}{\hlstd\ \ \ \ }{\hlstd else:\leavevmode\par
+{\hllin 05\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd t\ $\mathord{=}$\ len(T)\leavevmode\par
+{\hllin 06\ }\leavevmode\par
+{\hllin 07\ }}{\hlstd\ \ \ \ }{\hlstd beta\ $\mathord{=}$\ math.ceil(n\ /\ 2.0)\leavevmode\par
+{\hllin 08\ }}{\hlstd\ \ \ \ }{\hlstd b\ $\mathord{=}$\ int(math.ceil(math.ceil(beta\ *\ math.log(self.\_{}radix,\ 2))\ /\ 8.0))\leavevmode\par
+{\hllin 09\ }}{\hlstd\ \ \ \ }{\hlstd d\ $\mathord{=}$\ 4\ *\ int(math.ceil(b\ /\ 4.0))\leavevmode\par
+{\hllin 10\ }\leavevmode\par
+{\hllin 11\ }}{\hlstd\ \ \ \ }{\hlstd if\ self.isEven(i):\leavevmode\par
+{\hllin 12\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd m\ $\mathord{=}$\ int(math.floor(n\ /\ 2.0))\leavevmode\par
+{\hllin 13\ }}{\hlstd\ \ \ \ }{\hlstd else:\leavevmode\par
+{\hllin 14\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd m\ $\mathord{=}$\ int(math.ceil(n\ /\ 2.0))\leavevmode\par
+{\hllin 15\ }\leavevmode\par
+{\hllin 16\ }}{\hlstd\ \ \ \ }{\hlstd if\ not\ self.\_{}P.get(n):\leavevmode\par
+{\hllin 17\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd P\ $\mathord{=}$\ '$\backslash$x01'}{\hlstd\ \ }{\hlstd \#{}\ vers\leavevmode\par
+{\hllin 18\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd P\ $\mathord{+}$$\mathord{=}$\ '$\backslash$x02'}{\hlstd\ \ }{\hlstd \#{}\ method\leavevmode\par
+{\hllin 19\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd P\ $\mathord{+}$$\mathord{=}$\ '$\backslash$x01'}{\hlstd\ \ }{\hlstd \#{}\ addition\leavevmode\par
+{\hllin 20\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd P\ $\mathord{+}$$\mathord{=}$\ long\_{}to\_{}bytes(self.\_{}radix,\ 3)\leavevmode\par
+{\hllin 21\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd P\ $\mathord{+}$$\mathord{=}$\ '$\backslash$x0a'\ \#{}\ always\ ten\leavevmode\par
+{\hllin 22\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd P\ $\mathord{+}$$\mathord{=}$\ long\_{}to\_{}bytes(self.split(n)\%{}256,\ 1)\leavevmode\par
+{\hllin 23\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd P\ $\mathord{+}$$\mathord{=}$\ long\_{}to\_{}bytes(n,\ 4)\leavevmode\par
+{\hllin 24\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd P\ $\mathord{+}$$\mathord{=}$\ long\_{}to\_{}bytes(t,\ 4)\leavevmode\par
+{\hllin 25\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd self.\_{}P[n]\ $\mathord{=}$\ P\leavevmode\par
+{\hllin 26\ }\leavevmode\par
+{\hllin 27\ }}{\hlstd\ \ \ \ }{\hlstd if\ T\ $\mathord{=}$$\mathord{=}$\ 0:\leavevmode\par
+{\hllin 28\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd Q\ $\mathord{=}$\ ''\leavevmode\par
+{\hllin 29\ }}{\hlstd\ \ \ \ }{\hlstd else:\leavevmode\par
+{\hllin 30\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd Q\ $\mathord{=}$\ str(T)\leavevmode\par
+{\hllin 31\ }}{\hlstd\ \ \ \ \ \ \ \ \ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 32\ }}{\hlstd\ \ \ \ }{\hlstd Q\ $\mathord{+}$$\mathord{=}$\ '$\backslash$x00'\ *\ ((($\mathord{-}$1\ *\ t)\ $\mathord{-}$\ b\ $\mathord{-}$\ 1)\ \%{}\ 16)\leavevmode\par
+{\hllin 33\ }}{\hlstd\ \ \ \ }{\hlstd Q\ $\mathord{+}$$\mathord{=}$\ long\_{}to\_{}bytes(i,\ blocksize$\mathord{=}$1)\leavevmode\par
+{\hllin 34\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 35\ }}{\hlstd\ \ \ \ }{\hlstd \_{}B\_{}as\_{}bytes\ $\mathord{=}$\ long\_{}to\_{}bytes(B)\leavevmode\par
+{\hllin 36\ }}{\hlstd\ \ \ \ }{\hlstd Q\ $\mathord{+}$$\mathord{=}$\ '$\backslash$x00'\ *\ (b\ $\mathord{-}$\ len(\_{}B\_{}as\_{}bytes))\leavevmode\par
+{\hllin 37\ }}{\hlstd\ \ \ \ }{\hlstd Q\ $\mathord{+}$$\mathord{=}$\ \_{}B\_{}as\_{}bytes[$\mathord{-}$b:]\leavevmode\par
+{\hllin 38\ }\leavevmode\par
+{\hllin 39\ }}{\hlstd\ \ \ \ }{\hlstd \_{}cbc\ $\mathord{=}$\ AES.new(self.\_{}K,\ AES.MODE\_{}CBC,\ '$\backslash$x00'\ *\ 16)\leavevmode\par
+{\hllin 40\ }\leavevmode\par
+{\hllin 41\ }}{\hlstd\ \ \ \ }{\hlstd assert\ len(self.\_{}P[n])\ \%{}\ 16\ $\mathord{=}$$\mathord{=}$\ 0\leavevmode\par
+{\hllin 42\ }}{\hlstd\ \ \ \ }{\hlstd assert\ len(Q)\ \%{}\ 16\ $\mathord{=}$$\mathord{=}$\ 0\leavevmode\par
+{\hllin 43\ }\leavevmode\par
+{\hllin 44\ }}{\hlstd\ \ \ \ }{\hlstd Y\ $\mathord{=}$\ \_{}cbc.encrypt(self.\_{}P[n]\ $\mathord{+}$\ Q)[$\mathord{-}$16:]\leavevmode\par
+{\hllin 45\ }\leavevmode\par
+{\hllin 46\ }}{\hlstd\ \ \ \ }{\hlstd i\ $\mathord{=}$\ 1\leavevmode\par
+{\hllin 47\ }}{\hlstd\ \ \ \ }{\hlstd TMP\ $\mathord{=}$\ Y\leavevmode\par
+{\hllin 48\ }}{\hlstd\ \ \ \ }{\hlstd while\ len(TMP)\ $\mathord{<}$\ (d\ $\mathord{+}$\ 4):\leavevmode\par
+{\hllin 49\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd left\ $\mathord{=}$\ FFXInteger(bytes\_{}to\_{}long(Y),\ radix$\mathord{=}$self.\_{}radix,\ blocksize$\mathord{=}$32)\leavevmode\par
+{\hllin 50\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd right\ $\mathord{=}$\ FFXInteger(str(i),\ radix$\mathord{=}$10,\ blocksize$\mathord{=}$16)\leavevmode\par
+{\hllin 51\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd X\ $\mathord{=}$\ self.add(left,\ right)\leavevmode\par
+{\hllin 52\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd TMP\ $\mathord{+}$$\mathord{=}$\ self.\_{}ecb.encrypt(X.to\_{}bytes(16))\leavevmode\par
+{\hllin 53\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd i\ $\mathord{+}$$\mathord{=}$\ 1\leavevmode\par
+{\hllin 54\ }\leavevmode\par
+{\hllin 55\ }}{\hlstd\ \ \ \ }{\hlstd y\ $\mathord{=}$\ bytes\_{}to\_{}long(TMP[:(d\ $\mathord{+}$\ 4)])\leavevmode\par
+{\hllin 56\ }}{\hlstd\ \ \ \ }{\hlstd z\ $\mathord{=}$\ y\ \%{}\ (self.\_{}radix\ **\ m)\leavevmode\par
+{\hllin 57\ }\leavevmode\par
+{\hllin 58\ }}{\hlstd\ \ \ \ }{\hlstd return\ z}\leavevmode\par
+}

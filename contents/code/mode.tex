@@ -1,0 +1,362 @@
+{
+\tt
+{\hlstd {\hllin 01\ }public\ class\ ModeSEncodedMessage\ extends\ org.apache.avro.specific.SpecificRecordBase\ implements\ org.apache.avro.specific.SpecificRecord\ $\{$\leavevmode\par
+{\hllin 02\ }}{\hlstd\ \ }{\hlstd public\ static\ final\ org.apache.avro.Schema\ SCHEMA\${}\ $\mathord{=}$\ new\ org.apache.avro.Schema.Parser().parse("$\{$$\backslash$"type$\backslash$":$\backslash$"record$\backslash$",$\backslash$"name$\backslash$":$\backslash$"ModeSEncodedMessage$\backslash$",$\backslash$"namespace$\backslash$":$\backslash$"org.opensky.sample$\backslash$",$\backslash$"fields$\backslash$":[$\{$$\backslash$"name$\backslash$":$\backslash$"sensorType$\backslash$",$\backslash$"type$\backslash$":$\backslash$"string$\backslash$"$\}$,$\{$$\backslash$"name$\backslash$":$\backslash$"sensorLatitude$\backslash$",$\backslash$"type$\backslash$":[$\backslash$"double$\backslash$",$\backslash$"null$\backslash$"]$\}$,$\{$$\backslash$"name$\backslash$":$\backslash$"sensorLongitude$\backslash$",$\backslash$"type$\backslash$":[$\backslash$"double$\backslash$",$\backslash$"null$\backslash$"]$\}$,$\{$$\backslash$"name$\backslash$":$\backslash$"sensorAltitude$\backslash$",$\backslash$"type$\backslash$":[$\backslash$"double$\backslash$",$\backslash$"null$\backslash$"]$\}$,$\{$$\backslash$"name$\backslash$":$\backslash$"timeAtServer$\backslash$",$\backslash$"type$\backslash$":$\backslash$"double$\backslash$"$\}$,$\{$$\backslash$"name$\backslash$":$\backslash$"timeAtSensor$\backslash$",$\backslash$"type$\backslash$":[$\backslash$"double$\backslash$",$\backslash$"null$\backslash$"]$\}$,$\{$$\backslash$"name$\backslash$":$\backslash$"timestamp$\backslash$",$\backslash$"type$\backslash$":[$\backslash$"double$\backslash$",$\backslash$"null$\backslash$"]$\}$,$\{$$\backslash$"name$\backslash$":$\backslash$"rawMessage$\backslash$",$\backslash$"type$\backslash$":$\backslash$"string$\backslash$"$\}$,$\{$$\backslash$"name$\backslash$":$\backslash$"sensorSerialNumber$\backslash$",$\backslash$"type$\backslash$":$\backslash$"int$\backslash$"$\}$,$\{$$\backslash$"name$\backslash$":$\backslash$"RSSIPacket$\backslash$",$\backslash$"type$\backslash$":[$\backslash$"double$\backslash$",$\backslash$"null$\backslash$"]$\}$,$\{$$\backslash$"name$\backslash$":$\backslash$"RSSIPreamble$\backslash$",$\backslash$"type$\backslash$":[$\backslash$"double$\backslash$",$\backslash$"null$\backslash$"]$\}$,$\{$$\backslash$"name$\backslash$":$\backslash$"SNR$\backslash$",$\backslash$"type$\backslash$":[$\backslash$"double$\backslash$",$\backslash$"null$\backslash$"]$\}$,$\{$$\backslash$"name$\backslash$":$\backslash$"confidence$\backslash$",$\backslash$"type$\backslash$":[$\backslash$"double$\backslash$",$\backslash$"null$\backslash$"]$\}$]$\}$");\leavevmode\par
+{\hllin 03\ }}{\hlstd\ \ }{\hlstd public\ static\ org.apache.avro.Schema\ getClassSchema()\ $\{$\ return\ SCHEMA\${};\ $\}$\leavevmode\par
+{\hllin 04\ }}{\hlstd\ \ }{\hlstd @Deprecated\ public\ java.lang.CharSequence\ sensorType;\leavevmode\par
+{\hllin 05\ }}{\hlstd\ \ }{\hlstd @Deprecated\ public\ java.lang.Double\ sensorLatitude;\leavevmode\par
+{\hllin 06\ }}{\hlstd\ \ }{\hlstd @Deprecated\ public\ java.lang.Double\ sensorLongitude;\leavevmode\par
+{\hllin 07\ }}{\hlstd\ \ }{\hlstd @Deprecated\ public\ java.lang.Double\ sensorAltitude;\leavevmode\par
+{\hllin 08\ }}{\hlstd\ \ }{\hlstd @Deprecated\ public\ double\ timeAtServer;\leavevmode\par
+{\hllin 09\ }}{\hlstd\ \ }{\hlstd @Deprecated\ public\ java.lang.Double\ timeAtSensor;\leavevmode\par
+{\hllin 10\ }}{\hlstd\ \ }{\hlstd @Deprecated\ public\ java.lang.Double\ timestamp;\leavevmode\par
+{\hllin 11\ }}{\hlstd\ \ }{\hlstd @Deprecated\ public\ java.lang.CharSequence\ rawMessage;\leavevmode\par
+{\hllin 12\ }}{\hlstd\ \ }{\hlstd @Deprecated\ public\ int\ sensorSerialNumber;\leavevmode\par
+{\hllin 13\ }}{\hlstd\ \ }{\hlstd @Deprecated\ public\ java.lang.Double\ RSSIPacket;\leavevmode\par
+{\hllin 14\ }}{\hlstd\ \ }{\hlstd @Deprecated\ public\ java.lang.Double\ RSSIPreamble;\leavevmode\par
+{\hllin 15\ }}{\hlstd\ \ }{\hlstd @Deprecated\ public\ java.lang.Double\ SNR;\leavevmode\par
+{\hllin 16\ }}{\hlstd\ \ }{\hlstd @Deprecated\ public\ java.lang.Double\ confidence;\leavevmode\par
+{\hllin 17\ }\leavevmode\par
+{\hllin 18\ }}{\hlstd\ \ }{\hlstd /**\leavevmode\par
+{\hllin 19\ }}{\hlstd\ \ \ }{\hlstd *\ Default\ constructor.}{\hlstd\ \ }{\hlstd Note\ that\ this\ does\ not\ initialize\ fields\leavevmode\par
+{\hllin 20\ }}{\hlstd\ \ \ }{\hlstd *\ to\ their\ default\ values\ from\ the\ schema.}{\hlstd\ \ }{\hlstd If\ that\ is\ desired\ then\leavevmode\par
+{\hllin 21\ }}{\hlstd\ \ \ }{\hlstd *\ one\ should\ use\ $\mathord{<}$code$\mathord{>}$newBuilder()$\mathord{<}$/code$\mathord{>}$.\ \leavevmode\par
+{\hllin 22\ }}{\hlstd\ \ \ }{\hlstd */\leavevmode\par
+{\hllin 23\ }}{\hlstd\ \ }{\hlstd public\ ModeSEncodedMessage()\ $\{$$\}$\leavevmode\par
+{\hllin 24\ }}{\hlstd\ \ }{\hlstd private}{\hlstd\ \ }{\hlstd CharSequence\ FFXEncrypt(CharSequence\ rawMessage)$\{$\leavevmode\par
+{\hllin 25\ }}{\hlstd\ \ \ \ }{\hlstd System.err.println("unencrypted\ raw\ message\ is\ "\ $\mathord{+}$\ rawMessage);\leavevmode\par
+{\hllin 26\ }}{\hlstd\ \ \ \ }{\hlstd try\ $\{$\leavevmode\par
+{\hllin 27\ }}{\hlstd\ \ \ \ \ \ }{\hlstd Process\ proc\ $\mathord{=}$\ Runtime.getRuntime().exec("python\ $\backslash$"C:$\backslash$$\backslash$Users$\backslash$$\backslash$Serlina$\backslash$$\backslash$PycharmProjects$\backslash$$\backslash$FinalyearProject$\backslash$$\backslash$ADS$\mathord{-}$B\ out$\backslash$$\backslash$libffx$\backslash$$\backslash$example.py$\backslash$"\ "\ $\mathord{+}$\ rawMessage);\leavevmode\par
+{\hllin 28\ }}{\hlstd\ \ \ \ \ \ }{\hlstd BufferedReader\ bufferedReader\ $\mathord{=}$\ new\ BufferedReader(new\ InputStreamReader(proc.getInputStream()));\leavevmode\par
+{\hllin 29\ }}{\hlstd\ \ \ \ \ \ }{\hlstd rawMessage\ $\mathord{=}$\ bufferedReader.readLine();\leavevmode\par
+{\hllin 30\ }}{\hlstd\ \ \ \ \ \ }{\hlstd proc.waitFor();\leavevmode\par
+{\hllin 31\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 32\ }}{\hlstd\ \ \ \ }{\hlstd catch\ (Exception\ e)$\{$\leavevmode\par
+{\hllin 33\ }}{\hlstd\ \ \ \ \ \ }{\hlstd e.printStackTrace();\leavevmode\par
+{\hllin 34\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 35\ }}{\hlstd\ \ \ \ }{\hlstd System.err.println("encrypted\ raw\ message\ is\ "\ $\mathord{+}$\ rawMessage);\leavevmode\par
+{\hllin 36\ }}{\hlstd\ \ \ \ }{\hlstd return\ rawMessage;\leavevmode\par
+{\hllin 37\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 38\ }}{\hlstd\ \ }{\hlstd private}{\hlstd\ \ }{\hlstd CharSequence\ FFXDecrypt(CharSequence\ encryptedMessage)$\{$\leavevmode\par
+{\hllin 39\ }}{\hlstd\ \ \ \ }{\hlstd System.err.println("encrypted\ raw\ message\ is\ "\ $\mathord{+}$\ encryptedMessage);\leavevmode\par
+{\hllin 40\ }}{\hlstd\ \ \ \ }{\hlstd try\ $\{$\leavevmode\par
+{\hllin 41\ }}{\hlstd\ \ \ \ \ \ }{\hlstd Process\ proc\ $\mathord{=}$\ Runtime.getRuntime().exec("python\ $\backslash$"C:$\backslash$$\backslash$Users$\backslash$$\backslash$Serlina$\backslash$$\backslash$PycharmProjects$\backslash$$\backslash$FinalyearProject$\backslash$$\backslash$ADS$\mathord{-}$B\ in$\backslash$$\backslash$libffx$\backslash$$\backslash$example.py$\backslash$"\ "\ $\mathord{+}$\ encryptedMessage);\leavevmode\par
+{\hllin 42\ }}{\hlstd\ \ \ \ \ \ }{\hlstd BufferedReader\ bufferedReader\ $\mathord{=}$\ new\ BufferedReader(new\ InputStreamReader(proc.getInputStream()));\leavevmode\par
+{\hllin 43\ }}{\hlstd\ \ \ \ \ \ }{\hlstd rawMessage\ $\mathord{=}$\ bufferedReader.readLine();\leavevmode\par
+{\hllin 44\ }}{\hlstd\ \ \ \ \ \ }{\hlstd proc.waitFor();\leavevmode\par
+{\hllin 45\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 46\ }}{\hlstd\ \ \ \ }{\hlstd catch\ (Exception\ e)$\{$\leavevmode\par
+{\hllin 47\ }}{\hlstd\ \ \ \ \ \ }{\hlstd e.printStackTrace();\leavevmode\par
+{\hllin 48\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 49\ }}{\hlstd\ \ \ \ }{\hlstd System.err.println("decrypted\ raw\ message\ is\ "\ $\mathord{+}$\ rawMessage);\leavevmode\par
+{\hllin 50\ }}{\hlstd\ \ \ \ }{\hlstd return\ rawMessage;\leavevmode\par
+{\hllin 51\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 52\ }}{\hlstd\ \ }{\hlstd /**\leavevmode\par
+{\hllin 53\ }}{\hlstd\ \ \ }{\hlstd *\ All$\mathord{-}$args\ constructor.\leavevmode\par
+{\hllin 54\ }}{\hlstd\ \ \ }{\hlstd */\leavevmode\par
+{\hllin 55\ }}{\hlstd\ \ }{\hlstd public\ ModeSEncodedMessage(java.lang.CharSequence\ sensorType,\ java.lang.Double\ sensorLatitude,\ java.lang.Double\ sensorLongitude,\ java.lang.Double\ sensorAltitude,\ java.lang.Double\ timeAtServer,\ java.lang.Double\ timeAtSensor,\ java.lang.Double\ timestamp,\ java.lang.CharSequence\ rawMessage,\ java.lang.Integer\ sensorSerialNumber,\ java.lang.Double\ RSSIPacket,\ java.lang.Double\ RSSIPreamble,\ java.lang.Double\ SNR,\ java.lang.Double\ confidence)\ $\{$\leavevmode\par
+{\hllin 56\ }}{\hlstd\ \ \ \ }{\hlstd this.sensorType\ $\mathord{=}$\ sensorType;\leavevmode\par
+{\hllin 57\ }}{\hlstd\ \ \ \ }{\hlstd this.sensorLatitude\ $\mathord{=}$\ sensorLatitude;\leavevmode\par
+{\hllin 58\ }}{\hlstd\ \ \ \ }{\hlstd this.sensorLongitude\ $\mathord{=}$\ sensorLongitude;\leavevmode\par
+{\hllin 59\ }}{\hlstd\ \ \ \ }{\hlstd this.sensorAltitude\ $\mathord{=}$\ sensorAltitude;\leavevmode\par
+{\hllin 60\ }}{\hlstd\ \ \ \ }{\hlstd this.timeAtServer\ $\mathord{=}$\ timeAtServer;\leavevmode\par
+{\hllin 61\ }}{\hlstd\ \ \ \ }{\hlstd this.timeAtSensor\ $\mathord{=}$\ timeAtSensor;\leavevmode\par
+{\hllin 62\ }}{\hlstd\ \ \ \ }{\hlstd this.timestamp\ $\mathord{=}$\ timestamp;\leavevmode\par
+{\hllin 63\ }}{\hlstd\ \ \ \ }{\hlstd this.rawMessage\ $\mathord{=}$\ rawMessage;\leavevmode\par
+{\hllin 64\ }}{\hlstd\ \ \ \ }{\hlstd this.sensorSerialNumber\ $\mathord{=}$\ sensorSerialNumber;\leavevmode\par
+{\hllin 65\ }}{\hlstd\ \ \ \ }{\hlstd this.RSSIPacket\ $\mathord{=}$\ RSSIPacket;\leavevmode\par
+{\hllin 66\ }}{\hlstd\ \ \ \ }{\hlstd this.RSSIPreamble\ $\mathord{=}$\ RSSIPreamble;\leavevmode\par
+{\hllin 67\ }}{\hlstd\ \ \ \ }{\hlstd this.SNR\ $\mathord{=}$\ SNR;\leavevmode\par
+{\hllin 68\ }}{\hlstd\ \ \ \ }{\hlstd this.confidence\ $\mathord{=}$\ confidence;\leavevmode\par
+{\hllin 69\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 70\ }\leavevmode\par
+{\hllin 71\ }}{\hlstd\ \ }{\hlstd public\ org.apache.avro.Schema\ getSchema()\ $\{$\ return\ SCHEMA\${};\ $\}$\leavevmode\par
+{\hllin 72\ }}{\hlstd\ \ }{\hlstd //\ Used\ by\ DatumWriter.}{\hlstd\ \ }{\hlstd Applications\ should\ not\ call.\ \leavevmode\par
+{\hllin 73\ }}{\hlstd\ \ }{\hlstd public\ java.lang.Object\ get(int\ field\${})\ $\{$\leavevmode\par
+{\hllin 74\ }}{\hlstd\ \ \ \ }{\hlstd switch\ (field\${})\ $\{$\leavevmode\par
+{\hllin 75\ }}{\hlstd\ \ \ \ }{\hlstd case\ 0:\ return\ sensorType;\leavevmode\par
+{\hllin 76\ }}{\hlstd\ \ \ \ }{\hlstd case\ 1:\ return\ sensorLatitude;\leavevmode\par
+{\hllin 77\ }}{\hlstd\ \ \ \ }{\hlstd case\ 2:\ return\ sensorLongitude;\leavevmode\par
+{\hllin 78\ }}{\hlstd\ \ \ \ }{\hlstd case\ 3:\ return\ sensorAltitude;\leavevmode\par
+{\hllin 79\ }}{\hlstd\ \ \ \ }{\hlstd case\ 4:\ return\ timeAtServer;\leavevmode\par
+{\hllin 80\ }}{\hlstd\ \ \ \ }{\hlstd case\ 5:\ return\ timeAtSensor;\leavevmode\par
+{\hllin 81\ }}{\hlstd\ \ \ \ }{\hlstd case\ 6:\ return\ timestamp;\leavevmode\par
+{\hllin 82\ }}{\hlstd\ \ \ \ }{\hlstd case\ 7:\ return\ rawMessage;\leavevmode\par
+{\hllin 83\ }}{\hlstd\ \ \ \ }{\hlstd case\ 8:\ return\ sensorSerialNumber;\leavevmode\par
+{\hllin 84\ }}{\hlstd\ \ \ \ }{\hlstd case\ 9:\ return\ RSSIPacket;\leavevmode\par
+{\hllin 85\ }}{\hlstd\ \ \ \ }{\hlstd case\ 10:\ return\ RSSIPreamble;\leavevmode\par
+{\hllin 86\ }}{\hlstd\ \ \ \ }{\hlstd case\ 11:\ return\ SNR;\leavevmode\par
+{\hllin 87\ }}{\hlstd\ \ \ \ }{\hlstd case\ 12:\ return\ confidence;\leavevmode\par
+{\hllin 88\ }}{\hlstd\ \ \ \ }{\hlstd default:\ throw\ new\ org.apache.avro.AvroRuntimeException("Bad\ index");\leavevmode\par
+{\hllin 89\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 90\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 91\ }}{\hlstd\ \ }{\hlstd //\ Used\ by\ DatumReader.}{\hlstd\ \ }{\hlstd Applications\ should\ not\ call.\ \leavevmode\par
+{\hllin 92\ }}{\hlstd\ \ }{\hlstd @SuppressWarnings(value$\mathord{=}$"unchecked")\leavevmode\par
+{\hllin 93\ }}{\hlstd\ \ }{\hlstd public\ void\ put(int\ field\${},\ java.lang.Object\ value\${})\ $\{$\leavevmode\par
+{\hllin 94\ }}{\hlstd\ \ \ \ }{\hlstd switch\ (field\${})\ $\{$\leavevmode\par
+{\hllin 95\ }}{\hlstd\ \ \ \ }{\hlstd case\ 0:\ sensorType\ $\mathord{=}$\ (java.lang.CharSequence)value\${};\ break;\leavevmode\par
+{\hllin 96\ }}{\hlstd\ \ \ \ }{\hlstd case\ 1:\ sensorLatitude\ $\mathord{=}$\ (java.lang.Double)value\${};\ break;\leavevmode\par
+{\hllin 97\ }}{\hlstd\ \ \ \ }{\hlstd case\ 2:\ sensorLongitude\ $\mathord{=}$\ (java.lang.Double)value\${};\ break;\leavevmode\par
+{\hllin 98\ }}{\hlstd\ \ \ \ }{\hlstd case\ 3:\ sensorAltitude\ $\mathord{=}$\ (java.lang.Double)value\${};\ break;\leavevmode\par
+{\hllin 99\ }}{\hlstd\ \ \ \ }{\hlstd case\ 4:\ timeAtServer\ $\mathord{=}$\ (java.lang.Double)value\${};\ break;\leavevmode\par
+{\hllin 100\ }}{\hlstd\ \ \ \ }{\hlstd case\ 5:\ timeAtSensor\ $\mathord{=}$\ (java.lang.Double)value\${};\ break;\leavevmode\par
+{\hllin 101\ }}{\hlstd\ \ \ \ }{\hlstd case\ 6:\ timestamp\ $\mathord{=}$\ (java.lang.Double)value\${};\ break;\leavevmode\par
+{\hllin 102\ }}{\hlstd\ \ \ \ }{\hlstd case\ 7:\ rawMessage\ $\mathord{=}$\ (java.lang.CharSequence)value\${};\ break;\leavevmode\par
+{\hllin 103\ }}{\hlstd\ \ \ \ }{\hlstd case\ 8:\ sensorSerialNumber\ $\mathord{=}$\ (java.lang.Integer)value\${};\ break;\leavevmode\par
+{\hllin 104\ }}{\hlstd\ \ \ \ }{\hlstd case\ 9:\ RSSIPacket\ $\mathord{=}$\ (java.lang.Double)value\${};\ break;\leavevmode\par
+{\hllin 105\ }}{\hlstd\ \ \ \ }{\hlstd case\ 10:\ RSSIPreamble\ $\mathord{=}$\ (java.lang.Double)value\${};\ break;\leavevmode\par
+{\hllin 106\ }}{\hlstd\ \ \ \ }{\hlstd case\ 11:\ SNR\ $\mathord{=}$\ (java.lang.Double)value\${};\ break;\leavevmode\par
+{\hllin 107\ }}{\hlstd\ \ \ \ }{\hlstd case\ 12:\ confidence\ $\mathord{=}$\ (java.lang.Double)value\${};\ break;\leavevmode\par
+{\hllin 108\ }}{\hlstd\ \ \ \ }{\hlstd default:\ throw\ new\ org.apache.avro.AvroRuntimeException("Bad\ index");\leavevmode\par
+{\hllin 109\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 110\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 111\ }\leavevmode\par
+{\hllin 112\ }}{\hlstd\ \ }{\hlstd /**\leavevmode\par
+{\hllin 113\ }}{\hlstd\ \ \ }{\hlstd *\ Gets\ the\ value\ of\ the\ 'sensorType'\ field.\leavevmode\par
+{\hllin 114\ }}{\hlstd\ \ \ }{\hlstd */\leavevmode\par
+{\hllin 115\ }}{\hlstd\ \ }{\hlstd public\ java.lang.CharSequence\ getSensorType()\ $\{$\leavevmode\par
+{\hllin 116\ }}{\hlstd\ \ \ \ }{\hlstd return\ sensorType;\leavevmode\par
+{\hllin 117\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 118\ }\leavevmode\par
+{\hllin 119\ }}{\hlstd\ \ }{\hlstd /**\leavevmode\par
+{\hllin 120\ }}{\hlstd\ \ \ }{\hlstd *\ Sets\ the\ value\ of\ the\ 'sensorType'\ field.\leavevmode\par
+{\hllin 121\ }}{\hlstd\ \ \ }{\hlstd *\ @param\ value\ the\ value\ to\ set.\leavevmode\par
+{\hllin 122\ }}{\hlstd\ \ \ }{\hlstd */\leavevmode\par
+{\hllin 123\ }}{\hlstd\ \ }{\hlstd public\ void\ setSensorType(java.lang.CharSequence\ value)\ $\{$\leavevmode\par
+{\hllin 124\ }}{\hlstd\ \ \ \ }{\hlstd this.sensorType\ $\mathord{=}$\ value;\leavevmode\par
+{\hllin 125\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 126\ }\leavevmode\par
+{\hllin 127\ }...\leavevmode\par
+{\hllin 128\ }...\leavevmode\par
+{\hllin 129\ }...\leavevmode\par
+{\hllin 130\ }\leavevmode\par
+{\hllin 131\ }}{\hlstd\ \ }{\hlstd /**\leavevmode\par
+{\hllin 132\ }}{\hlstd\ \ \ }{\hlstd *\ Gets\ the\ value\ of\ the\ 'rawMessage'\ field.\leavevmode\par
+{\hllin 133\ }}{\hlstd\ \ \ }{\hlstd */\leavevmode\par
+{\hllin 134\ }}{\hlstd\ \ }{\hlstd public\ java.lang.CharSequence\ getRawMessage()\ $\{$\leavevmode\par
+{\hllin 135\ }}{\hlstd\ \ \ \ }{\hlstd return\ FFXEncrypt(rawMessage);\leavevmode\par
+{\hllin 136\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 137\ }\leavevmode\par
+{\hllin 138\ }}{\hlstd\ \ }{\hlstd /**\leavevmode\par
+{\hllin 139\ }}{\hlstd\ \ \ }{\hlstd *\ Sets\ the\ value\ of\ the\ 'rawMessage'\ field.\leavevmode\par
+{\hllin 140\ }}{\hlstd\ \ \ }{\hlstd *\ @param\ value\ the\ value\ to\ set.\leavevmode\par
+{\hllin 141\ }}{\hlstd\ \ \ }{\hlstd */\leavevmode\par
+{\hllin 142\ }}{\hlstd\ \ }{\hlstd public\ void\ setRawMessage(java.lang.CharSequence\ value)\ $\{$\leavevmode\par
+{\hllin 143\ }}{\hlstd\ \ \ \ }{\hlstd this.rawMessage\ $\mathord{=}$\ value;\leavevmode\par
+{\hllin 144\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 145\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 146\ }...\leavevmode\par
+{\hllin 147\ }...\leavevmode\par
+{\hllin 148\ }...\leavevmode\par
+{\hllin 149\ }\leavevmode\par
+{\hllin 150\ }}{\hlstd\ \ }{\hlstd /**\leavevmode\par
+{\hllin 151\ }}{\hlstd\ \ \ }{\hlstd *\ Gets\ the\ value\ of\ the\ 'confidence'\ field.\leavevmode\par
+{\hllin 152\ }}{\hlstd\ \ \ }{\hlstd */\leavevmode\par
+{\hllin 153\ }}{\hlstd\ \ }{\hlstd public\ java.lang.Double\ getConfidence()\ $\{$\leavevmode\par
+{\hllin 154\ }}{\hlstd\ \ \ \ }{\hlstd return\ confidence;\leavevmode\par
+{\hllin 155\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 156\ }\leavevmode\par
+{\hllin 157\ }}{\hlstd\ \ }{\hlstd /**\leavevmode\par
+{\hllin 158\ }}{\hlstd\ \ \ }{\hlstd *\ Sets\ the\ value\ of\ the\ 'confidence'\ field.\leavevmode\par
+{\hllin 159\ }}{\hlstd\ \ \ }{\hlstd *\ @param\ value\ the\ value\ to\ set.\leavevmode\par
+{\hllin 160\ }}{\hlstd\ \ \ }{\hlstd */\leavevmode\par
+{\hllin 161\ }}{\hlstd\ \ }{\hlstd public\ void\ setConfidence(java.lang.Double\ value)\ $\{$\leavevmode\par
+{\hllin 162\ }}{\hlstd\ \ \ \ }{\hlstd this.confidence\ $\mathord{=}$\ value;\leavevmode\par
+{\hllin 163\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 164\ }\leavevmode\par
+{\hllin 165\ }}{\hlstd\ \ }{\hlstd /**\ Creates\ a\ new\ ModeSEncodedMessage\ RecordBuilder\ */\leavevmode\par
+{\hllin 166\ }}{\hlstd\ \ }{\hlstd public\ static\ org.opensky.example.ModeSEncodedMessage.Builder\ newBuilder()\ $\{$\leavevmode\par
+{\hllin 167\ }}{\hlstd\ \ \ \ }{\hlstd return\ new\ org.opensky.example.ModeSEncodedMessage.Builder();\leavevmode\par
+{\hllin 168\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 169\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 170\ }}{\hlstd\ \ }{\hlstd /**\ Creates\ a\ new\ ModeSEncodedMessage\ RecordBuilder\ by\ copying\ an\ existing\ Builder\ */\leavevmode\par
+{\hllin 171\ }}{\hlstd\ \ }{\hlstd public\ static\ org.opensky.example.ModeSEncodedMessage.Builder\ newBuilder(org.opensky.example.ModeSEncodedMessage.Builder\ other)\ $\{$\leavevmode\par
+{\hllin 172\ }}{\hlstd\ \ \ \ }{\hlstd return\ new\ org.opensky.example.ModeSEncodedMessage.Builder(other);\leavevmode\par
+{\hllin 173\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 174\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 175\ }}{\hlstd\ \ }{\hlstd /**\ Creates\ a\ new\ ModeSEncodedMessage\ RecordBuilder\ by\ copying\ an\ existing\ ModeSEncodedMessage\ instance\ */\leavevmode\par
+{\hllin 176\ }}{\hlstd\ \ }{\hlstd public\ static\ org.opensky.example.ModeSEncodedMessage.Builder\ newBuilder(org.opensky.example.ModeSEncodedMessage\ other)\ $\{$\leavevmode\par
+{\hllin 177\ }}{\hlstd\ \ \ \ }{\hlstd return\ new\ org.opensky.example.ModeSEncodedMessage.Builder(other);\leavevmode\par
+{\hllin 178\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 179\ }}{\hlstd\ \ }{\hlstd \leavevmode\par
+{\hllin 180\ }}{\hlstd\ \ }{\hlstd /**\leavevmode\par
+{\hllin 181\ }}{\hlstd\ \ \ }{\hlstd *\ RecordBuilder\ for\ ModeSEncodedMessage\ instances.\leavevmode\par
+{\hllin 182\ }}{\hlstd\ \ \ }{\hlstd */\leavevmode\par
+{\hllin 183\ }}{\hlstd\ \ }{\hlstd public\ static\ class\ Builder\ extends\ org.apache.avro.specific.SpecificRecordBuilderBase$\mathord{<}$ModeSEncodedMessage$\mathord{>}$\leavevmode\par
+{\hllin 184\ }}{\hlstd\ \ \ \ }{\hlstd implements\ org.apache.avro.data.RecordBuilder$\mathord{<}$ModeSEncodedMessage$\mathord{>}$\ $\{$\leavevmode\par
+{\hllin 185\ }\leavevmode\par
+{\hllin 186\ }}{\hlstd\ \ \ \ }{\hlstd private\ java.lang.CharSequence\ sensorType;\leavevmode\par
+{\hllin 187\ }}{\hlstd\ \ \ \ }{\hlstd private\ java.lang.Double\ sensorLatitude;\leavevmode\par
+{\hllin 188\ }}{\hlstd\ \ \ \ }{\hlstd private\ java.lang.Double\ sensorLongitude;\leavevmode\par
+{\hllin 189\ }}{\hlstd\ \ \ \ }{\hlstd private\ java.lang.Double\ sensorAltitude;\leavevmode\par
+{\hllin 190\ }}{\hlstd\ \ \ \ }{\hlstd private\ double\ timeAtServer;\leavevmode\par
+{\hllin 191\ }}{\hlstd\ \ \ \ }{\hlstd private\ java.lang.Double\ timeAtSensor;\leavevmode\par
+{\hllin 192\ }}{\hlstd\ \ \ \ }{\hlstd private\ java.lang.Double\ timestamp;\leavevmode\par
+{\hllin 193\ }}{\hlstd\ \ \ \ }{\hlstd private\ java.lang.CharSequence\ rawMessage;\leavevmode\par
+{\hllin 194\ }}{\hlstd\ \ \ \ }{\hlstd private\ int\ sensorSerialNumber;\leavevmode\par
+{\hllin 195\ }}{\hlstd\ \ \ \ }{\hlstd private\ java.lang.Double\ RSSIPacket;\leavevmode\par
+{\hllin 196\ }}{\hlstd\ \ \ \ }{\hlstd private\ java.lang.Double\ RSSIPreamble;\leavevmode\par
+{\hllin 197\ }}{\hlstd\ \ \ \ }{\hlstd private\ java.lang.Double\ SNR;\leavevmode\par
+{\hllin 198\ }}{\hlstd\ \ \ \ }{\hlstd private\ java.lang.Double\ confidence;\leavevmode\par
+{\hllin 199\ }\leavevmode\par
+{\hllin 200\ }}{\hlstd\ \ \ \ }{\hlstd /**\ Creates\ a\ new\ Builder\ */\leavevmode\par
+{\hllin 201\ }}{\hlstd\ \ \ \ }{\hlstd private\ Builder()\ $\{$\leavevmode\par
+{\hllin 202\ }}{\hlstd\ \ \ \ \ \ }{\hlstd super(org.opensky.example.ModeSEncodedMessage.SCHEMA\${});\leavevmode\par
+{\hllin 203\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 204\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 205\ }}{\hlstd\ \ \ \ }{\hlstd /**\ Creates\ a\ Builder\ by\ copying\ an\ existing\ Builder\ */\leavevmode\par
+{\hllin 206\ }}{\hlstd\ \ \ \ }{\hlstd private\ Builder(org.opensky.example.ModeSEncodedMessage.Builder\ other)\ $\{$\leavevmode\par
+{\hllin 207\ }}{\hlstd\ \ \ \ \ \ }{\hlstd super(other);\leavevmode\par
+{\hllin 208\ }}{\hlstd\ \ \ \ \ \ }{\hlstd if\ (isValidValue(fields()[0],\ other.sensorType))\ $\{$\leavevmode\par
+{\hllin 209\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd this.sensorType\ $\mathord{=}$\ data().deepCopy(fields()[0].schema(),\ other.sensorType);\leavevmode\par
+{\hllin 210\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd fieldSetFlags()[0]\ $\mathord{=}$\ true;\leavevmode\par
+{\hllin 211\ }}{\hlstd\ \ \ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 212\ }\leavevmode\par
+{\hllin 213\ }...\leavevmode\par
+{\hllin 214\ }...\leavevmode\par
+{\hllin 215\ }...\leavevmode\par
+{\hllin 216\ }}{\hlstd\ \ \ \ \ \ }{\hlstd if\ (isValidValue(fields()[7],\ other.rawMessage))\ $\{$\leavevmode\par
+{\hllin 217\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd this.rawMessage\ $\mathord{=}$\ data().deepCopy(fields()[7].schema(),\ other.rawMessage);\leavevmode\par
+{\hllin 218\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd fieldSetFlags()[7]\ $\mathord{=}$\ true;\leavevmode\par
+{\hllin 219\ }}{\hlstd\ \ \ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 220\ }...\leavevmode\par
+{\hllin 221\ }...\leavevmode\par
+{\hllin 222\ }...\leavevmode\par
+{\hllin 223\ }}{\hlstd\ \ \ \ \ \ }{\hlstd if\ (isValidValue(fields()[12],\ other.confidence))\ $\{$\leavevmode\par
+{\hllin 224\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd this.confidence\ $\mathord{=}$\ data().deepCopy(fields()[12].schema(),\ other.confidence);\leavevmode\par
+{\hllin 225\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd fieldSetFlags()[12]\ $\mathord{=}$\ true;\leavevmode\par
+{\hllin 226\ }}{\hlstd\ \ \ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 227\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 228\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 229\ }}{\hlstd\ \ \ \ }{\hlstd /**\ Creates\ a\ Builder\ by\ copying\ an\ existing\ ModeSEncodedMessage\ instance\ */\leavevmode\par
+{\hllin 230\ }}{\hlstd\ \ \ \ }{\hlstd private\ Builder(org.opensky.example.ModeSEncodedMessage\ other)\ $\{$\leavevmode\par
+{\hllin 231\ }}{\hlstd\ \ \ \ \ \ \ \ \ \ \ \ }{\hlstd super(org.opensky.example.ModeSEncodedMessage.SCHEMA\${});\leavevmode\par
+{\hllin 232\ }}{\hlstd\ \ \ \ \ \ }{\hlstd if\ (isValidValue(fields()[0],\ other.sensorType))\ $\{$\leavevmode\par
+{\hllin 233\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd this.sensorType\ $\mathord{=}$\ data().deepCopy(fields()[0].schema(),\ other.sensorType);\leavevmode\par
+{\hllin 234\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd fieldSetFlags()[0]\ $\mathord{=}$\ true;\leavevmode\par
+{\hllin 235\ }}{\hlstd\ \ \ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 236\ }\leavevmode\par
+{\hllin 237\ }...\leavevmode\par
+{\hllin 238\ }...\leavevmode\par
+{\hllin 239\ }...\leavevmode\par
+{\hllin 240\ }}{\hlstd\ \ \ \ \ \ }{\hlstd if\ (isValidValue(fields()[7],\ other.rawMessage))\ $\{$\leavevmode\par
+{\hllin 241\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd this.rawMessage\ $\mathord{=}$\ data().deepCopy(fields()[7].schema(),\ other.rawMessage);\leavevmode\par
+{\hllin 242\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd fieldSetFlags()[7]\ $\mathord{=}$\ true;\leavevmode\par
+{\hllin 243\ }}{\hlstd\ \ \ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 244\ }...\leavevmode\par
+{\hllin 245\ }...\leavevmode\par
+{\hllin 246\ }...\leavevmode\par
+{\hllin 247\ }}{\hlstd\ \ \ \ \ \ }{\hlstd if\ (isValidValue(fields()[12],\ other.confidence))\ $\{$\leavevmode\par
+{\hllin 248\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd this.confidence\ $\mathord{=}$\ data().deepCopy(fields()[12].schema(),\ other.confidence);\leavevmode\par
+{\hllin 249\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd fieldSetFlags()[12]\ $\mathord{=}$\ true;\leavevmode\par
+{\hllin 250\ }}{\hlstd\ \ \ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 251\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 252\ }\leavevmode\par
+{\hllin 253\ }}{\hlstd\ \ \ \ }{\hlstd /**\ Gets\ the\ value\ of\ the\ 'sensorType'\ field\ */\leavevmode\par
+{\hllin 254\ }}{\hlstd\ \ \ \ }{\hlstd public\ java.lang.CharSequence\ getSensorType()\ $\{$\leavevmode\par
+{\hllin 255\ }}{\hlstd\ \ \ \ \ \ }{\hlstd return\ sensorType;\leavevmode\par
+{\hllin 256\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 257\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 258\ }}{\hlstd\ \ \ \ }{\hlstd /**\ Sets\ the\ value\ of\ the\ 'sensorType'\ field\ */\leavevmode\par
+{\hllin 259\ }}{\hlstd\ \ \ \ }{\hlstd public\ org.opensky.example.ModeSEncodedMessage.Builder\ setSensorType(java.lang.CharSequence\ value)\ $\{$\leavevmode\par
+{\hllin 260\ }}{\hlstd\ \ \ \ \ \ }{\hlstd validate(fields()[0],\ value);\leavevmode\par
+{\hllin 261\ }}{\hlstd\ \ \ \ \ \ }{\hlstd this.sensorType\ $\mathord{=}$\ value;\leavevmode\par
+{\hllin 262\ }}{\hlstd\ \ \ \ \ \ }{\hlstd fieldSetFlags()[0]\ $\mathord{=}$\ true;\leavevmode\par
+{\hllin 263\ }}{\hlstd\ \ \ \ \ \ }{\hlstd return\ this;\ \leavevmode\par
+{\hllin 264\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 265\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 266\ }}{\hlstd\ \ \ \ }{\hlstd /**\ Checks\ whether\ the\ 'sensorType'\ field\ has\ been\ set\ */\leavevmode\par
+{\hllin 267\ }}{\hlstd\ \ \ \ }{\hlstd public\ boolean\ hasSensorType()\ $\{$\leavevmode\par
+{\hllin 268\ }}{\hlstd\ \ \ \ \ \ }{\hlstd return\ fieldSetFlags()[0];\leavevmode\par
+{\hllin 269\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 270\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 271\ }}{\hlstd\ \ \ \ }{\hlstd /**\ Clears\ the\ value\ of\ the\ 'sensorType'\ field\ */\leavevmode\par
+{\hllin 272\ }}{\hlstd\ \ \ \ }{\hlstd public\ org.opensky.example.ModeSEncodedMessage.Builder\ clearSensorType()\ $\{$\leavevmode\par
+{\hllin 273\ }}{\hlstd\ \ \ \ \ \ }{\hlstd sensorType\ $\mathord{=}$\ null;\leavevmode\par
+{\hllin 274\ }}{\hlstd\ \ \ \ \ \ }{\hlstd fieldSetFlags()[0]\ $\mathord{=}$\ false;\leavevmode\par
+{\hllin 275\ }}{\hlstd\ \ \ \ \ \ }{\hlstd return\ this;\leavevmode\par
+{\hllin 276\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 277\ }\leavevmode\par
+{\hllin 278\ }...\leavevmode\par
+{\hllin 279\ }...\leavevmode\par
+{\hllin 280\ }...\leavevmode\par
+{\hllin 281\ }\leavevmode\par
+{\hllin 282\ }}{\hlstd\ \ \ \ }{\hlstd /**\ Gets\ the\ value\ of\ the\ 'rawMessage'\ field\ */\leavevmode\par
+{\hllin 283\ }}{\hlstd\ \ \ \ }{\hlstd public\ java.lang.CharSequence\ getRawMessage()\ $\{$\leavevmode\par
+{\hllin 284\ }}{\hlstd\ \ \ \ \ \ }{\hlstd return\ rawMessage;\leavevmode\par
+{\hllin 285\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 286\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 287\ }}{\hlstd\ \ \ \ }{\hlstd /**\ Sets\ the\ value\ of\ the\ 'rawMessage'\ field\ */\leavevmode\par
+{\hllin 288\ }}{\hlstd\ \ \ \ }{\hlstd public\ org.opensky.example.ModeSEncodedMessage.Builder\ setRawMessage(java.lang.CharSequence\ value)\ $\{$\leavevmode\par
+{\hllin 289\ }}{\hlstd\ \ \ \ \ \ }{\hlstd validate(fields()[7],\ value);\leavevmode\par
+{\hllin 290\ }}{\hlstd\ \ \ \ \ \ }{\hlstd this.rawMessage\ $\mathord{=}$\ value;\leavevmode\par
+{\hllin 291\ }}{\hlstd\ \ \ \ \ \ }{\hlstd fieldSetFlags()[7]\ $\mathord{=}$\ true;\leavevmode\par
+{\hllin 292\ }}{\hlstd\ \ \ \ \ \ }{\hlstd return\ this;\ \leavevmode\par
+{\hllin 293\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 294\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 295\ }}{\hlstd\ \ \ \ }{\hlstd /**\ Checks\ whether\ the\ 'rawMessage'\ field\ has\ been\ set\ */\leavevmode\par
+{\hllin 296\ }}{\hlstd\ \ \ \ }{\hlstd public\ boolean\ hasRawMessage()\ $\{$\leavevmode\par
+{\hllin 297\ }}{\hlstd\ \ \ \ \ \ }{\hlstd return\ fieldSetFlags()[7];\leavevmode\par
+{\hllin 298\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 299\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 300\ }}{\hlstd\ \ \ \ }{\hlstd /**\ Clears\ the\ value\ of\ the\ 'rawMessage'\ field\ */\leavevmode\par
+{\hllin 301\ }}{\hlstd\ \ \ \ }{\hlstd public\ org.opensky.example.ModeSEncodedMessage.Builder\ clearRawMessage()\ $\{$\leavevmode\par
+{\hllin 302\ }}{\hlstd\ \ \ \ \ \ }{\hlstd rawMessage\ $\mathord{=}$\ null;\leavevmode\par
+{\hllin 303\ }}{\hlstd\ \ \ \ \ \ }{\hlstd fieldSetFlags()[7]\ $\mathord{=}$\ false;\leavevmode\par
+{\hllin 304\ }}{\hlstd\ \ \ \ \ \ }{\hlstd return\ this;\leavevmode\par
+{\hllin 305\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 306\ }\leavevmode\par
+{\hllin 307\ }...\leavevmode\par
+{\hllin 308\ }...\leavevmode\par
+{\hllin 309\ }...\leavevmode\par
+{\hllin 310\ }\leavevmode\par
+{\hllin 311\ }}{\hlstd\ \ \ \ }{\hlstd /**\ Gets\ the\ value\ of\ the\ 'confidence'\ field\ */\leavevmode\par
+{\hllin 312\ }}{\hlstd\ \ \ \ }{\hlstd public\ java.lang.Double\ getConfidence()\ $\{$\leavevmode\par
+{\hllin 313\ }}{\hlstd\ \ \ \ \ \ }{\hlstd return\ confidence;\leavevmode\par
+{\hllin 314\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 315\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 316\ }}{\hlstd\ \ \ \ }{\hlstd /**\ Sets\ the\ value\ of\ the\ 'confidence'\ field\ */\leavevmode\par
+{\hllin 317\ }}{\hlstd\ \ \ \ }{\hlstd public\ org.opensky.example.ModeSEncodedMessage.Builder\ setConfidence(java.lang.Double\ value)\ $\{$\leavevmode\par
+{\hllin 318\ }}{\hlstd\ \ \ \ \ \ }{\hlstd validate(fields()[12],\ value);\leavevmode\par
+{\hllin 319\ }}{\hlstd\ \ \ \ \ \ }{\hlstd this.confidence\ $\mathord{=}$\ value;\leavevmode\par
+{\hllin 320\ }}{\hlstd\ \ \ \ \ \ }{\hlstd fieldSetFlags()[12]\ $\mathord{=}$\ true;\leavevmode\par
+{\hllin 321\ }}{\hlstd\ \ \ \ \ \ }{\hlstd return\ this;\ \leavevmode\par
+{\hllin 322\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 323\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 324\ }}{\hlstd\ \ \ \ }{\hlstd /**\ Checks\ whether\ the\ 'confidence'\ field\ has\ been\ set\ */\leavevmode\par
+{\hllin 325\ }}{\hlstd\ \ \ \ }{\hlstd public\ boolean\ hasConfidence()\ $\{$\leavevmode\par
+{\hllin 326\ }}{\hlstd\ \ \ \ \ \ }{\hlstd return\ fieldSetFlags()[12];\leavevmode\par
+{\hllin 327\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 328\ }}{\hlstd\ \ \ \ }{\hlstd \leavevmode\par
+{\hllin 329\ }}{\hlstd\ \ \ \ }{\hlstd /**\ Clears\ the\ value\ of\ the\ 'confidence'\ field\ */\leavevmode\par
+{\hllin 330\ }}{\hlstd\ \ \ \ }{\hlstd public\ org.opensky.example.ModeSEncodedMessage.Builder\ clearConfidence()\ $\{$\leavevmode\par
+{\hllin 331\ }}{\hlstd\ \ \ \ \ \ }{\hlstd confidence\ $\mathord{=}$\ null;\leavevmode\par
+{\hllin 332\ }}{\hlstd\ \ \ \ \ \ }{\hlstd fieldSetFlags()[12]\ $\mathord{=}$\ false;\leavevmode\par
+{\hllin 333\ }}{\hlstd\ \ \ \ \ \ }{\hlstd return\ this;\leavevmode\par
+{\hllin 334\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 335\ }\leavevmode\par
+{\hllin 336\ }}{\hlstd\ \ \ \ }{\hlstd @Override\leavevmode\par
+{\hllin 337\ }}{\hlstd\ \ \ \ }{\hlstd public\ ModeSEncodedMessage\ build()\ $\{$\leavevmode\par
+{\hllin 338\ }}{\hlstd\ \ \ \ \ \ }{\hlstd try\ $\{$\leavevmode\par
+{\hllin 339\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd ModeSEncodedMessage\ record\ $\mathord{=}$\ new\ ModeSEncodedMessage();\leavevmode\par
+{\hllin 340\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd record.sensorType\ $\mathord{=}$\ fieldSetFlags()[0]\ ?\ this.sensorType\ :\ (java.lang.CharSequence)\ defaultValue(fields()[0]);\leavevmode\par
+{\hllin 341\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd record.sensorLatitude\ $\mathord{=}$\ fieldSetFlags()[1]\ ?\ this.sensorLatitude\ :\ (java.lang.Double)\ defaultValue(fields()[1]);\leavevmode\par
+{\hllin 342\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd record.sensorLongitude\ $\mathord{=}$\ fieldSetFlags()[2]\ ?\ this.sensorLongitude\ :\ (java.lang.Double)\ defaultValue(fields()[2]);\leavevmode\par
+{\hllin 343\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd record.sensorAltitude\ $\mathord{=}$\ fieldSetFlags()[3]\ ?\ this.sensorAltitude\ :\ (java.lang.Double)\ defaultValue(fields()[3]);\leavevmode\par
+{\hllin 344\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd record.timeAtServer\ $\mathord{=}$\ fieldSetFlags()[4]\ ?\ this.timeAtServer\ :\ (java.lang.Double)\ defaultValue(fields()[4]);\leavevmode\par
+{\hllin 345\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd record.timeAtSensor\ $\mathord{=}$\ fieldSetFlags()[5]\ ?\ this.timeAtSensor\ :\ (java.lang.Double)\ defaultValue(fields()[5]);\leavevmode\par
+{\hllin 346\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd record.timestamp\ $\mathord{=}$\ fieldSetFlags()[6]\ ?\ this.timestamp\ :\ (java.lang.Double)\ defaultValue(fields()[6]);\leavevmode\par
+{\hllin 347\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd record.rawMessage\ $\mathord{=}$\ fieldSetFlags()[7]\ ?\ this.rawMessage\ :\ (java.lang.CharSequence)\ defaultValue(fields()[7]);\leavevmode\par
+{\hllin 348\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd record.sensorSerialNumber\ $\mathord{=}$\ fieldSetFlags()[8]\ ?\ this.sensorSerialNumber\ :\ (java.lang.Integer)\ defaultValue(fields()[8]);\leavevmode\par
+{\hllin 349\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd record.RSSIPacket\ $\mathord{=}$\ fieldSetFlags()[9]\ ?\ this.RSSIPacket\ :\ (java.lang.Double)\ defaultValue(fields()[9]);\leavevmode\par
+{\hllin 350\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd record.RSSIPreamble\ $\mathord{=}$\ fieldSetFlags()[10]\ ?\ this.RSSIPreamble\ :\ (java.lang.Double)\ defaultValue(fields()[10]);\leavevmode\par
+{\hllin 351\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd record.SNR\ $\mathord{=}$\ fieldSetFlags()[11]\ ?\ this.SNR\ :\ (java.lang.Double)\ defaultValue(fields()[11]);\leavevmode\par
+{\hllin 352\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd record.confidence\ $\mathord{=}$\ fieldSetFlags()[12]\ ?\ this.confidence\ :\ (java.lang.Double)\ defaultValue(fields()[12]);\leavevmode\par
+{\hllin 353\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd return\ record;\leavevmode\par
+{\hllin 354\ }}{\hlstd\ \ \ \ \ \ }{\hlstd $\}$\ catch\ (Exception\ e)\ $\{$\leavevmode\par
+{\hllin 355\ }}{\hlstd\ \ \ \ \ \ \ \ }{\hlstd throw\ new\ org.apache.avro.AvroRuntimeException(e);\leavevmode\par
+{\hllin 356\ }}{\hlstd\ \ \ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 357\ }}{\hlstd\ \ \ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 358\ }}{\hlstd\ \ }{\hlstd $\}$\leavevmode\par
+{\hllin 359\ }$\}$}\leavevmode\par
+}

@@ -1,0 +1,16 @@
+def encrypt(self, T, X):
+    retval = ''
+
+    n = len(X)
+    l = self.split(n)
+    r = 10 #self.rnds(n)
+    A = X[:l]
+    B = X[l:]
+    for i in range(r):
+        C = self.add(A, self.F(n, T, i, B))
+        A = B
+        B = C
+
+    retval = FFXInteger(str(A) + str(B), radix=self._radix)
+        
+    return retval
